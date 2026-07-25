@@ -1,9 +1,10 @@
+import HeroSection from "@/components/HeroSection";
 
 
 export default function Home() {
   return (
     <div>
-fund wave project 
+<HeroSection></HeroSection>
 
     </div>
   );
