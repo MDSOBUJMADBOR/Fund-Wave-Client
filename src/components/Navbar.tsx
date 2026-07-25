@@ -9,21 +9,17 @@ import { useState } from "react";
 
 const navLinks = [
   {
-    title: "Home",
+    title: "Explore Campaigns",
     href: "/",
   },
   {
-    title: "Explore",
+    title: "How it Works",
     href: "/House",
   },
   {
-    title: "About",
+    title: "About Us",
     href: "/about",
-  },
-  {
-    title: "Blog",
-    href: "/blog",
-  },
+  },  
   {
     title: "Contact",
     href: "/contact",
@@ -58,10 +54,10 @@ const handleSignOut = async () => {
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <HiHome className="text-3xl text-blue-600" />
+          <HiHome className="text-3xl text-[#8200db]" />
           <h1 className="text-2xl font-bold">
-            <span className="text-gray-900">Home</span>
-            <span className="text-blue-600">Finder</span>
+            <span className="text-gray-900">Fund</span>
+            <span className="text-[#8200db]">Wave</span>
           </h1>
         </Link>
 
@@ -77,8 +73,8 @@ const handleSignOut = async () => {
                     href={item.href}
                     className={`rounded-md px-4 py-2 text-sm font-medium transition-all duration-300 ${
                       isActive
-                        ? "bg-blue-600 text-white"
-                        : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                        ? "bg-[#8200db] text-white"
+                        : "text-black hover:bg-[#e0dce2] hover:text-[#a273c4]"
                     }`}
                   >
                     {item.title}
@@ -101,6 +97,14 @@ const handleSignOut = async () => {
           register
         </button>
       </Link>
+<a
+  href="https://github.com/MDSOBUJMADBOR/Fund-Wave-Client"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-block rounded-md  px-5 py-2 text-white bg-[#8200db] font-semibold"
+>
+  Join as Developer
+</a>
 </div>
 
 
