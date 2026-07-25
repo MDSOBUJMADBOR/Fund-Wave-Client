@@ -52,6 +52,30 @@ const testimonials: Testimonial[] = [
     photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=300&auto=format&fit=crop",
     rating: 5,
     quote: "As a first-time creator, I received 20 default credits just for signing up! The dashboard analytics made tracking contributions effortless."
+  },
+  {
+    id: 5,
+    name: "Michael Brown",
+    role: "Startup Founder",
+    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop",
+    rating: 5,
+    quote: "FundBuddy helped us connect with supporters from around the world. The secure credit system made every contribution transparent and trustworthy."
+  },
+  {
+    id: 6,
+    name: "Emily Carter",
+    role: "Education Project Creator",
+    photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=300&auto=format&fit=crop",
+    rating: 5,
+    quote: "Launching my educational campaign was simple and stress-free. I loved how easy it was to engage with supporters and monitor campaign progress."
+  },
+  {
+    id: 7,
+    name: "James Wilson",
+    role: "Creative Supporter",
+    photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=300&auto=format&fit=crop",
+    rating: 5,
+    quote: "I've backed multiple campaigns through FundBuddy, and every experience has been smooth. It's rewarding to see innovative ideas receive the support they deserve."
   }
 ];
 
