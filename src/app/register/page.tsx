@@ -87,7 +87,7 @@ export default function RegisterPage() {
   
 
     console.log(userData);
-    
+
 
     setSuccessMsg('Registration successful! Check browser console for data.');
     setErrorMsg('');
@@ -100,8 +100,8 @@ export default function RegisterPage() {
         {/* Left Side: Info Cards */}
         <div className="md:col-span-5 flex flex-col gap-6 justify-between">
           {/* Top Illustration/Banner Placeholder */}
-          <div className="bg-purple-50 rounded-2xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden min-h-[200px]">
-            <div className="w-20 h-20 bg-purple-200/60 rounded-full flex items-center justify-center mb-3">
+          <div className=" bg-purple-50 rounded-2xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden min-h-[200px]">
+            <div className=" w-20 h-20 bg-purple-200/60 rounded-full flex items-center justify-center mb-3">
               <User className="w-10 h-10 text-purple-600" />
             </div>
             <div className="space-y-2 w-full max-w-[180px]">
@@ -109,6 +109,7 @@ export default function RegisterPage() {
               <div className="h-2 bg-purple-200 rounded w-3/4 mx-auto"></div>
             </div>
           </div>
+
 
           {/* Welcome Bonus Card */}
           <div className="bg-purple-50/60 border border-purple-100 rounded-2xl p-5">
