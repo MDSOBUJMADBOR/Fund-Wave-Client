@@ -86,6 +86,7 @@ export default function RegisterPage() {
 
   
 
+    
     console.log(userData);
 
 

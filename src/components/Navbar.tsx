@@ -14,7 +14,7 @@ const navLinks = [
   },
   {
     title: "How it Works",
-    href: "/House",
+    href: "/howitworks",
   },
   {
     title: "About Us",
