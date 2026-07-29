@@ -15,7 +15,7 @@ import {
   Users, 
   User 
 } from 'lucide-react';
-// authClient import করুন (আপনার প্রজেক্টের পাথ অনুযায়ী প্রয়োজন হলে পরিবর্তন করুন)
+// authClient import করুন
 import { authClient } from '@/lib/auth-client';
 
 export default function LoginPage() {
@@ -74,13 +74,21 @@ export default function LoginPage() {
   // Handle Google Sign-In
   const handleGoogleSignIn = async () => {
     setLoading(true);
+    setAuthError('');
+
     try {
-      await authClient.signIn.social({
+      const result = await authClient.signIn.social({
         provider: 'google',
         callbackURL: '/',
       });
+
+      if (result?.error) {
+        alert('Google login failed!');
+        setAuthError(result.error.message || 'Google login failed!');
+      }
     } catch (error) {
       alert('Google login failed!');
+      setAuthError('An unexpected error occurred during Google Sign-In.');
     } finally {
       setLoading(false);
     }
@@ -145,7 +153,10 @@ export default function LoginPage() {
           <div className="flex border-b border-slate-200 mb-6">
             <button
               type="button"
-              onClick={() => setActiveTab('email')}
+              onClick={() => {
+                setActiveTab('email');
+                setAuthError('');
+              }}
               className={`pb-3 text-sm font-semibold transition border-b-2 flex-1 text-center ${
                 activeTab === 'email'
                   ? 'border-purple-600 text-purple-600'
@@ -156,7 +167,10 @@ export default function LoginPage() {
             </button>
             <button
               type="button"
-              onClick={() => setActiveTab('google')}
+              onClick={() => {
+                setActiveTab('google');
+                setAuthError('');
+              }}
               className={`pb-3 text-sm font-semibold transition border-b-2 flex-1 text-center ${
                 activeTab === 'google'
                   ? 'border-purple-600 text-purple-600'
@@ -270,7 +284,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={loading}
-                className="w-full py-2.5 border border-slate-200 hover:bg-slate-50 rounded-xl text-sm font-medium text-slate-700 transition flex items-center justify-center gap-2"
+                className="w-full py-2.5 border border-slate-200 hover:bg-slate-50 rounded-xl text-sm font-medium text-slate-700 transition flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path
@@ -290,7 +304,7 @@ export default function LoginPage() {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                   />
                 </svg>
-                Continue with Google
+                {loading ? 'Connecting...' : 'Continue with Google'}
               </button>
             </form>
           ) : (
@@ -299,11 +313,18 @@ export default function LoginPage() {
               <p className="text-sm text-slate-600">
                 Click below to sign in directly with your Google account.
               </p>
+
+              {authError && (
+                <p className="text-xs text-red-500 flex items-center justify-center gap-1 font-medium bg-red-50 p-2.5 rounded-xl border border-red-100">
+                  <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" /> {authError}
+                </p>
+              )}
+
               <button
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={loading}
-                className="w-full py-3 border border-slate-200 hover:bg-slate-50 rounded-xl text-sm font-medium text-slate-700 transition flex items-center justify-center gap-2 shadow-sm"
+                className="w-full py-3 border border-slate-200 hover:bg-slate-50 rounded-xl text-sm font-medium text-slate-700 transition flex items-center justify-center gap-2 shadow-sm disabled:opacity-50"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path

@@ -22,25 +22,41 @@ export const auth = betterAuth({
         }, 
     },
 
-
 user: {
     additionalFields: {
       role: {
         type: "string",
-        required: false,
-        defaultValue: "Supporter",
+        default: "Supporter",
       },
-      credits: {
-        type: "number",
-        required: false,
-        defaultValue: 0,
+      credits : {
+        type: "string",
+        default: "50"
       },
       plan: {
         type: "string",
-        required: false,
-        defaultValue: "free",
+        default: "free",
       },
-    }},
+    },
+  },
+
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          return {
+            data: {
+              ...user,
+              role: user.role ?? "Supporter",
+              credits: user.credits ?? "credits",
+              plan: user.plan ?? "free",
+            },
+          };
+        },
+      },
+    },
+  },
+
+
 
 
 });
