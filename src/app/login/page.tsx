@@ -76,6 +76,8 @@ export default function LoginPage() {
     setLoading(true);
     setAuthError('');
 
+
+
     try {
       const result = await authClient.signIn.social({
         provider: 'google',

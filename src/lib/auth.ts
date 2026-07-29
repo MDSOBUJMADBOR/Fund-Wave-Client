@@ -29,8 +29,8 @@ user: {
         default: "Supporter",
       },
       credits : {
-        type: "string",
-        default: "50"
+        type: "number",
+        default: 50
       },
       plan: {
         type: "string",
@@ -47,7 +47,7 @@ user: {
             data: {
               ...user,
               role: user.role ?? "Supporter",
-              credits: user.credits ?? "credits",
+              credits: user.credits ?? 50,
               plan: user.plan ?? "free",
             },
           };
