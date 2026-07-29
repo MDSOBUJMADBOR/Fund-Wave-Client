@@ -15,6 +15,8 @@ import {
   Users, 
   User 
 } from 'lucide-react';
+// authClient import করুন (আপনার প্রজেক্টের পাথ অনুযায়ী প্রয়োজন হলে পরিবর্তন করুন)
+import { authClient } from '@/lib/auth-client';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -37,12 +39,12 @@ export default function LoginPage() {
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailStr);
 
   // Handle Email Login
-  const handleEmailLogin = (e: React.FormEvent) => {
+  const handleEmailLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setEmailError('');
     setAuthError('');
 
-    // Validation 1: Check Email Format
+    // Validation: Check Email Format
     if (!isValidEmail(email)) {
       setEmailError('Please enter a valid email address');
       return;
@@ -50,36 +52,38 @@ export default function LoginPage() {
 
     setLoading(true);
 
-    // Dummy Authentication Simulation
-    setTimeout(() => {
-      // Demo validation check: Change this condition according to your test data
-      if (email === 'user@example.com' && password === '12345678') {
-        // 1. Generate & Store Secret Access Token in LocalStorage
-        const dummyToken = `secret_access_token_${Math.random().toString(36).substring(2)}_${Date.now()}`;
-        localStorage.setItem('access-token', dummyToken);
+    try {
+      const result = await authClient.signIn.email({
+        email,
+        password,
+        callbackURL: '/',
+      });
 
-        // 2. Redirect to Dashboard
-        router.push('/dashboard');
+      if (result?.error) {
+        setAuthError('User not found or incorrect email/password!');
       } else {
-        // Validation 2: Incorrect Email or Password
-        setAuthError('Incorrect email or password');
-        setLoading(false);
+        router.push('/');
       }
-    }, 1000);
+    } catch (error) {
+      setAuthError('User not found or incorrect email/password!');
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Handle Google Sign-In
-  const handleGoogleSignIn = () => {
+  const handleGoogleSignIn = async () => {
     setLoading(true);
-    
-    // Simulate Google OAuth
-    setTimeout(() => {
-      const googleToken = `google_access_token_${Math.random().toString(36).substring(2)}_${Date.now()}`;
-      localStorage.setItem('access-token', googleToken);
-
-      // Redirect to Dashboard
-      router.push('/dashboard');
-    }, 1200);
+    try {
+      await authClient.signIn.social({
+        provider: 'google',
+        callbackURL: '/',
+      });
+    } catch (error) {
+      alert('Google login failed!');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -88,7 +92,6 @@ export default function LoginPage() {
         
         {/* Left Side: Info & Features */}
         <div className="md:col-span-5 flex flex-col gap-6 justify-between">
-          {/* Top Illustration/Banner */}
           <div className="bg-purple-50 rounded-2xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden min-h-[220px]">
             <div className="w-20 h-20 bg-purple-200/60 rounded-full flex items-center justify-center mb-3">
               <User className="w-10 h-10 text-purple-600" />
@@ -98,7 +101,6 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Why Join Card */}
           <div className="bg-purple-50/50 border border-purple-100 rounded-2xl p-5">
             <h3 className="font-bold text-slate-800 text-sm mb-4">
               Why Join FundBuddy?
@@ -175,11 +177,13 @@ export default function LoginPage() {
                   <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
                     type="text"
+                    name="email"
                     placeholder="Enter your email address"
                     value={email}
                     onChange={(e) => {
                       setEmail(e.target.value);
                       setEmailError('');
+                      setAuthError('');
                     }}
                     className={`w-full pl-9 pr-4 py-2.5 bg-slate-50/50 border rounded-xl text-sm outline-none transition ${
                       emailError
@@ -202,6 +206,7 @@ export default function LoginPage() {
                   <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
                     type={showPassword ? 'text' : 'password'}
+                    name="password"
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => {
@@ -264,6 +269,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={handleGoogleSignIn}
+                disabled={loading}
                 className="w-full py-2.5 border border-slate-200 hover:bg-slate-50 rounded-xl text-sm font-medium text-slate-700 transition flex items-center justify-center gap-2"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">

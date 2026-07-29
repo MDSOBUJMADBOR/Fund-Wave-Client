@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import { HiHome } from "react-icons/hi2";
 import { HiMenu, HiX } from "react-icons/hi";
 import { useState } from "react";
-import { authClient } from "@/lib/auth-client";
-// import { authClient, useSession } from "@/lib/auth-client";
+import { authClient, useSession } from "@/lib/auth-client";
+
 
 const navLinks = [
   {
@@ -31,13 +31,13 @@ export default function Navbar() {
     const [open, setOpen] = useState(false); 
   const pathname = usePathname();
 
-// const { data: session } = useSession(); 
-// const role = (session?.user as any)?.role;
-// console.log(role,'role');
+const { data: session } = useSession(); 
+const role = (session?.user as any)?.role;
+console.log(role,'role');
 
-//   const userData = authClient.useSession();  
-// const user = userData.data?.user;  
-// console.log(user?.name,'user');
+  const userData = authClient.useSession();  
+const user = userData.data?.user;  
+console.log(user?.name,'user');
 
 if(pathname.includes('/dashboard')){
   return null; 
@@ -87,7 +87,9 @@ const handleSignOut = async () => {
         </nav>
 
 
-<div className="flex gap-2">
+
+ {/* default login register  */}
+{/* <div className="flex gap-2">
      <Link href="/login">
         <button className="rounded-md border border-blue-600 px-5 py-2 text-blue-600 hover:bg-blue-50 cursor-pointer">
           login
@@ -106,7 +108,7 @@ const handleSignOut = async () => {
 >
   Join as Developer
 </a>
-</div>
+</div> */}
 
 
 
@@ -114,7 +116,7 @@ const handleSignOut = async () => {
 
 
         {/* Buttons */}
-       {/* <div className="hidden items-center gap-4 md:flex">
+       <div className="hidden items-center gap-4 md:flex">
   {user ? (
     <>
       <span className="font-medium text-gray-700">
@@ -142,20 +144,20 @@ const handleSignOut = async () => {
     </>
   ) : (
     <>
-      <Link href="/signin">
+      <Link href="/login">
         <button className="rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 cursor-pointer">
           Login
         </button>
       </Link>
 
-      <Link href="/signup">
+      <Link href="/register">
         <button className="rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 cursor-pointer">
           Register
         </button>
       </Link>
     </>
   )}
-</div> */}
+</div>
 
 
 
@@ -197,7 +199,7 @@ const handleSignOut = async () => {
               );
             })}
 
-       {/* {user ? (
+       {user ? (
   <div className="mt-4 flex flex-col gap-3">
     <div className="rounded-md bg-gray-100 p-3">
       <p className="font-semibold">{user.name}</p>
@@ -240,7 +242,7 @@ const handleSignOut = async () => {
       </button>
     </Link>
   </div>
-)} */}
+)}
 
 
 
