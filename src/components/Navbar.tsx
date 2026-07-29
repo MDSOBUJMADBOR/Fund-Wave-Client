@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { HiHome } from "react-icons/hi2";
 import { HiMenu, HiX } from "react-icons/hi";
 import { useState } from "react";
+import { authClient } from "@/lib/auth-client";
 // import { authClient, useSession } from "@/lib/auth-client";
 
 const navLinks = [
