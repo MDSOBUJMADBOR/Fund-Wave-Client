@@ -23,4 +23,24 @@ export const auth = betterAuth({
     },
 
 
+user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        required: false,
+        defaultValue: "Supporter",
+      },
+      credits: {
+        type: "number",
+        required: false,
+        defaultValue: 0,
+      },
+      plan: {
+        type: "string",
+        required: false,
+        defaultValue: "free",
+      },
+    }},
+
+
 });

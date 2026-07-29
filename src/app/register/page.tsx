@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { 
   User, 
   Mail, 
@@ -12,10 +13,14 @@ import {
   CheckCircle2, 
   Gift, 
   ShieldCheck, 
-  ChevronDown
+  ChevronDown,
+  Loader2
 } from 'lucide-react';
+import { authClient } from '@/lib/auth-client';
 
 export default function RegisterPage() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -29,6 +34,7 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // Password Validation Rules
   const hasMinLength = formData.password.length >= 8;
@@ -55,44 +61,103 @@ export default function RegisterPage() {
     setSuccessMsg('');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+
+  //   // 1. Password Strength Check
+  //   if (!isPasswordStrong) {
+  //     setErrorMsg('Please meet all password requirements.');
+  //     return;
+  //   }
+
+  //   // 2. Passwords Match Check
+  //   if (!passwordsMatch) {
+  //     setErrorMsg('Passwords do not match.');
+  //     return;
+  //   }
+
+  //   setLoading(true);
+  //   setErrorMsg('');
+  //   setSuccessMsg('');
+
+  //   // 3. Assign Default Credits based on Role
+  //   const defaultCredits = formData.role === 'Supporter' ? 50 : 20;
+
+  //   try {
+  //     const { data, error } = await authClient.signUp.email({
+  //       email: formData.email,
+  //       password: formData.password,
+  //       name: formData.name,
+  //       image: formData.profilePictureUrl || undefined,
+  //       // Custom additional fields (Ensure user schema in Better Auth supports these fields)
+  //       role: formData.role,
+  //       credits: defaultCredits,
+  //       plan: 'free',
+  //     });
+
+  //     if (error) {
+  //       setErrorMsg(error.message || 'Registration failed. Please try again.');
+  //       setLoading(false);
+  //       return;
+  //     }
+
+  //     setSuccessMsg('Registration successful! Redirecting...');
+
+  //     // Redirect to homepage or login page
+  //     router.push('/');
+  //   } catch (err: any) {
+  //     setErrorMsg(err.message || 'An unexpected error occurred.');
+  //     setLoading(false);
+  //   }
+  // };
+
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 1. Password Strength Check
     if (!isPasswordStrong) {
       setErrorMsg('Please meet all password requirements.');
       return;
     }
 
-    // 2. Passwords Match Check
     if (!passwordsMatch) {
       setErrorMsg('Passwords do not match.');
       return;
     }
 
-    // 3. Assign Default Credits based on Role
+    setLoading(true);
+    setErrorMsg('');
+    setSuccessMsg('');
+
     const defaultCredits = formData.role === 'Supporter' ? 50 : 20;
 
-    // Final Data Structure for DB/Console
-    const userData = {
-      name: formData.name,
-      email: formData.email,
-      profilePictureUrl: formData.profilePictureUrl || null,
-      role: formData.role,
-      credits: defaultCredits, // Credits assigned once on registration
-      password: formData.password, // In real app, hash this before saving
-      createdAt: new Date().toISOString(),
-    };
+    try {
+      // 1. unused 'data' সরিয়ে শুধুমাত্র 'error' চেক করা হয়েছে (ESLint Fix)
+      // 2. TypeScript-কে custom fields এলাউ করতে 'as any' টাইপ কাস্ট ব্যবহার করা হয়েছে (TS Error Fix)
+      const { error } = await authClient.signUp.email({
+        email: formData.email,
+        password: formData.password,
+        name: formData.name,
+        image: formData.profilePictureUrl || undefined,
+        role: formData.role,
+        credits: defaultCredits,
+        plan: 'free',
+      } as any);
 
-  
+      if (error) {
+        setErrorMsg(error.message || 'Registration failed. Please try again.');
+        setLoading(false);
+        return;
+      }
 
-    
-    console.log(userData);
-
-
-    setSuccessMsg('Registration successful! Check browser console for data.');
-    setErrorMsg('');
+      setSuccessMsg('Registration successful! Redirecting...');
+      router.push('/');
+    } catch (err: any) {
+      setErrorMsg(err.message || 'An unexpected error occurred.');
+      setLoading(false);
+    }
   };
+
+
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 md:p-8">
@@ -100,7 +165,6 @@ export default function RegisterPage() {
         
         {/* Left Side: Info Cards */}
         <div className="md:col-span-5 flex flex-col gap-6 justify-between">
-          {/* Top Illustration/Banner Placeholder */}
           <div className=" bg-purple-50 rounded-2xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden min-h-[200px]">
             <div className=" w-20 h-20 bg-purple-200/60 rounded-full flex items-center justify-center mb-3">
               <User className="w-10 h-10 text-purple-600" />
@@ -110,7 +174,6 @@ export default function RegisterPage() {
               <div className="h-2 bg-purple-200 rounded w-3/4 mx-auto"></div>
             </div>
           </div>
-
 
           {/* Welcome Bonus Card */}
           <div className="bg-purple-50/60 border border-purple-100 rounded-2xl p-5">
@@ -330,9 +393,16 @@ export default function RegisterPage() {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full py-3 mt-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl text-sm transition shadow-lg shadow-purple-600/20 active:scale-[0.99]"
+              disabled={loading}
+              className="w-full py-3 mt-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl text-sm transition shadow-lg shadow-purple-600/20 active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-70"
             >
-              Create Account
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" /> Creating Account...
+                </>
+              ) : (
+                'Create Account'
+              )}
             </button>
           </form>
 
