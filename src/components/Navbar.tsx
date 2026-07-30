@@ -9,7 +9,7 @@ import { authClient } from "@/lib/auth-client";
 const navLinks = [
   {
     title: "Explore Campaigns",
-    href: "/",
+    href: "/explorecampaigns",
   },
   {
     title: "How it Works",
@@ -59,6 +59,7 @@ export default function Navbar() {
   const user = session?.user;
 
   // Dropdown এর বাইরে ক্লিক করলে প্রোফাইল মেনু বন্ধ হওয়া
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
