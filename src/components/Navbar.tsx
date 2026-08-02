@@ -57,8 +57,11 @@ export default function Navbar() {
 
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
+  const role = session?.user?.role;
 
-  // Dropdown এর বাইরে ক্লিক করলে প্রোফাইল মেনু বন্ধ হওয়া
+
+
+  // Dropdown এর বাইরে ক্লিক করলে প্রোফাইল মেনু বন্ধ হওয়া
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -152,7 +155,7 @@ export default function Navbar() {
                   </div>
 
                   <Link
-                    href="/dashboard/user/overview"
+                    href={`/dashboard/${role}/Home`}
                     onClick={() => setProfileOpen(false)}
                     className="block mb-2"
                   >
@@ -266,7 +269,7 @@ export default function Navbar() {
 
                 <div className="grid grid-cols-2 gap-2 pt-2">
                   <Link
-                    href={`/dashboard/user/overview`}
+                    href={`/dashboard/${role}/Home`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <button className="w-full rounded-md text-[#8200db] bg-purple-100 py-2 cursor-pointer text-sm font-semibold hover:bg-purple-200 transition">
