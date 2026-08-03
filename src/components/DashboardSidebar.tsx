@@ -71,17 +71,24 @@ export default function DashboardSidebar(): ReactNode {
 
   // 1. Changed to a standard helper function (not a React component component)
   const renderSidebarContent = () => (
-    <div className="flex flex-col h-full bg-gradient-to-b from-[#0b0f2a] to-[#020617] text-white">
+    <div className="flex flex-col h-full  border">
+<Image
+  src="/fund-wave.png"
+  className="w-full h-[70px] mx-auto "
+  alt="Dashboard"
+  width={500}
+  height={250}
+/>
       {/* Profile */}
       <div className="p-4 border-b border-white/10 flex items-center gap-3">
         <div>
           <p className="text-sm font-semibold">{session?.user?.name || "User"}</p>
-          <span className="text-xs text-gray-400">{role || "guest"}</span>
+          <span className="text-xs text-gray-500">{role || "guest"}</span>
         </div>
       </div>
 
       {/* Menu */}
-      <nav className="flex-1 p-3 space-y-1">
+      <nav className="flex-1 p-3 space-y-1 ">
         {navItems.map((item: MenuItem) => {
           const isActive = pathname === item.href;
 
@@ -89,10 +96,10 @@ export default function DashboardSidebar(): ReactNode {
             <Link
               key={item.key}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all border ${
                 isActive
-                  ? "bg-indigo-600 text-white"
-                  : "text-gray-400 hover:bg-white/10 hover:text-white"
+                  ? "bg-[#8200db] text-white"
+                  : " "
               }`}
             >
               <item.icon className="size-5" />
@@ -133,7 +140,7 @@ export default function DashboardSidebar(): ReactNode {
 
       {/* Mobile */}
       <Drawer>
-        <Button className="lg:hidden flex items-start gap-2 rounded border ">
+        <Button className="lg:hidden py-8 flex items-center gap-2 rounded-none ">
           <Bars className="size-5" />
           Menu
         </Button>
