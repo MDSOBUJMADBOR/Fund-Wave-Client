@@ -55,7 +55,7 @@ const DashboardNavbar = () => {
       {/* Left side: Logo */}
       <Link href="/" className="flex items-center gap-2">
         {/* Updated Logo Color to match Landing Page dark blue/slate */}
-        <span className="text-2xl font-extrabold text-[#0f172a] hover:text-indigo-600 transition-colors">
+        <span className="text-2xl font-extrabold text-[#7180a5] hover:text-indigo-600 transition-colors hidden md:flex">
           FundWave
         </span>
       </Link>

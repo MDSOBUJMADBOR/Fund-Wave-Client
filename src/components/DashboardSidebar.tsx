@@ -111,13 +111,13 @@ export default function DashboardSidebar(): ReactNode {
 
       {/* Bottom */}
       <div className="p-3 border-t border-white/10 space-y-2">
-        <Link
+        {/* <Link
           href="/"
-          className="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10"
+          className="flex items-center gap-3 px-3 py-2 rounded-lg text-black border transition-all hover:bg-gray-100"
         >
-          <House className="size-5" />
+          <House className="size-5 text-black" />
           Home
-        </Link>
+        </Link> */}
 
         <button
           onClick={handleLogout}
@@ -139,8 +139,8 @@ export default function DashboardSidebar(): ReactNode {
       </aside>
 
       {/* Mobile */}
-      <Drawer>
-        <Button className="lg:hidden py-8 flex items-center gap-2 rounded-none ">
+      <Drawer className="relative">
+        <Button className="lg:hidden py-8 flex items-center gap-2 rounded-none absolute top-0 left-0 z-50">
           <Bars className="size-5" />
           Menu
         </Button>
