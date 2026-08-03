@@ -97,30 +97,48 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <nav className="hidden md:block">
-          <ul className="flex items-center gap-2 lg:gap-4">
-            {navLinks.map((item) => {
-              const isActive = pathname === item.href;
+  <ul className="flex items-center gap-2 lg:gap-4">
+    {navLinks.map((item) => {
+      const isActive = pathname === item.href;
 
-              return (
-                <li key={item.title}>
-                  <Link
-                    href={item.href}
-                    className={`rounded-md px-4 py-2 text-sm font-medium transition-all duration-300 ${
-                      isActive
-                        ? "bg-[#8200db] text-white"
-                        : "text-gray-700 hover:bg-[#f3e8ff] hover:text-[#8200db]"
-                    }`}
-                  >
-                    {item.title}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+      return (
+        <li key={item.title}>
+          <Link
+            href={item.href}
+            className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 ${
+              isActive
+                ? "text-[#8200db] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:bg-[#8200db] after:origin-left after:scale-x-100 after:transition-transform after:duration-500"
+                : "text-gray-700 hover:text-[#8200db] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-[#8200db] after:transition-transform after:duration-500 hover:after:scale-x-100"
+            }`}
+          >
+            {item.title}
+          </Link>
+        </li>
+      );
+    })}
+  </ul>
+</nav>
 
         {/* Desktop Auth Section */}
         <div className="hidden md:flex items-center gap-3">
+
+
+{user?.role === "Supporter" && (
+  <div className="flex items-center  rounded-xl bg-[#e3d5ee] px-2 py-1">
+    <div className="text-2xl">🪙</div>
+
+    <div>
+      <p className="text-sm text-gray-600">
+        Available Credits
+      </p>
+
+      <p className="text-lg font-bold text-gray-900">
+        {user?.credits ?? 0} Credits
+      </p>
+    </div>
+  </div>
+)}
+
           {user ? (
             <div className="relative" ref={profileRef}>
               <button
@@ -143,10 +161,10 @@ export default function Navbar() {
               </button>
 
               {profileOpen && (
-                <div className="absolute right-0 mt-3 w-56 rounded-xl bg-[#080718] border border-white/10 p-2 shadow-2xl animate-fade-in z-50">
+                <div className="absolute right-0 mt-3 w-56 rounded-xl bg-white border border-white/10 p-2 shadow-2xl animate-fade-in z-50">
                   <div className="px-4 py-2 border-b border-white/10 mb-2">
-                    <p className="text-xs text-gray-400">Signed in as</p>
-                    <p className="text-sm font-bold text-white truncate">
+                    <p className="text-xs text-gray-400">SIGNED IN AS</p>
+                    <p className="text-sm font-bold  truncate">
                       {user?.name}
                     </p>
                     <p className="text-[10px] text-gray-500 truncate">
@@ -155,14 +173,35 @@ export default function Navbar() {
                   </div>
 
                   <Link
+                    href={`/profile`}
+                    onClick={() => setProfileOpen(false)}
+                    className="block mb-2"
+                  >
+                    <button className="w-full  rounded-md text-purple-600 bg-purple-500/10 py-2 cursor-pointer text-xs font-semibold hover:bg-purple-500/20 transition-colors">
+                       My Profile
+                    </button>
+                  </Link>
+
+                  <Link
                     href={`/dashboard/${role}/Home`}
                     onClick={() => setProfileOpen(false)}
                     className="block mb-2"
                   >
-                    <button className="w-full rounded-md text-purple-400 bg-purple-500/10 py-2 cursor-pointer text-xs font-semibold hover:bg-purple-500/20 transition-colors">
+                    <button className="w-full rounded-md text-purple-600 bg-purple-500/10 py-2 cursor-pointer text-xs font-semibold hover:bg-purple-500/20 transition-colors">
                       Dashboard
                     </button>
                   </Link>
+<a
+  href="https://github.com/MDSOBUJMADBOR"
+  target="_blank"
+  rel="noopener noreferrer"
+  onClick={() => setProfileOpen(false)}
+  className="block mb-2"
+>
+  <button className="w-full rounded-md text-purple-600 bg-purple-500/10 py-2 cursor-pointer text-xs font-semibold hover:bg-purple-500/20 transition-colors">
+    Join as Developer
+  </button>
+</a>
 
                   <button
                     onClick={handleSignOut}
@@ -174,20 +213,32 @@ export default function Navbar() {
               )}
             </div>
           ) : (
-            <div className="flex items-center gap-3">
-              <Link href="/login">
-                <button className="rounded-md border border-gray-300 px-5 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer transition">
-                  Login
-                </button>
-              </Link>
+            
+<div className="flex items-center gap-3">
+  <Link href="/login">
+    <button className="rounded-md border border-gray-300 px-5 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer transition">
+      Login
+    </button>
+  </Link>
 
-              <Link href="/register">
-                <button className="rounded-md bg-[#8200db] px-5 py-2 text-sm font-medium text-white hover:bg-[#6c00b8] cursor-pointer transition flex items-center gap-1.5">
-                  <LightningIcon />
-                  Register
-                </button>
-              </Link>
-            </div>
+  <Link href="/register">
+    <button className="rounded-md bg-[#8200db] px-5 py-2 text-sm font-medium text-white hover:bg-[#6c00b8] cursor-pointer transition flex items-center gap-1.5">
+      <LightningIcon />
+      Register
+    </button>
+  </Link>
+
+  <a
+    href="https://github.com/MDSOBUJMADBOR"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="rounded-md border border-purple-200 bg-purple-50 px-5 py-2 text-sm font-medium text-purple-600 hover:bg-purple-100 cursor-pointer transition"
+  >
+    Join as Developer
+  </a>
+</div>
+
+
           )}
         </div>
 

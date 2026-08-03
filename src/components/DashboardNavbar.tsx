@@ -55,7 +55,7 @@ const DashboardNavbar = () => {
       {/* Left side: Logo */}
       <Link href="/" className="flex items-center gap-2">
         {/* Updated Logo Color to match Landing Page dark blue/slate */}
-        <span className="text-2xl font-extrabold text-[#7180a5] hover:text-indigo-600 transition-colors hidden md:flex">
+        <span className="text-2xl font-extrabold text-indigo-600 transition-colors hidden lg:flex">
           FundWave
         </span>
       </Link>
@@ -105,15 +105,15 @@ const DashboardNavbar = () => {
                 </div>
 
                 {/* Dashboard Link commented out in original */}
-                {/* <Link
-                  href={`/dashboard/${role}/Home`}
+                <Link
+                  href={`/`}
                   onClick={() => setProfileOpen(false)}
                   className="block mb-2.5"
                 >
                   <button className="w-full rounded-xl text-indigo-700 bg-indigo-50 py-2.5 cursor-pointer text-sm font-semibold hover:bg-indigo-100 transition-colors">
-                    Dashboard
+                    Home
                    </button>
-                </Link> */}
+                </Link>
 
                 <button
                   onClick={handleSignOut}
