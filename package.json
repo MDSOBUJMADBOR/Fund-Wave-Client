@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@better-auth/mongo-adapter": "^1.6.25",
+    "@gravity-ui/icons": "^2.21.0",
+    "@heroui/react": "^3.2.3",
+    "@heroui/styles": "^3.2.3",
     "better-auth": "^1.6.25",
     "lucide-react": "^1.26.0",
     "mongodb": "^7.5.0",
