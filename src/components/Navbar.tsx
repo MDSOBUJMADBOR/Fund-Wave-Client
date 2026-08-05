@@ -58,6 +58,7 @@ export default function Navbar() {
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
   const role = session?.user?.role;
+  console.log(role,'role');
 
   // Dropdown এর বাইরে ক্লিক করলে প্রোফাইল মেনু বন্ধ হওয়া
   useEffect(() => {

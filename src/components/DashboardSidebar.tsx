@@ -24,7 +24,7 @@ interface MenuItem {
   key: string;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
-  href: string;
+  href: string; 
 }
 
 interface MenuConfig {

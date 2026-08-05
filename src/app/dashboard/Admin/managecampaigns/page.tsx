@@ -8,4 +8,4 @@ const ManageCampaignsPage = () => {
     );
 };
 
-export default ManageCampaignsPage;
+export default ManageCampaignsPage; 
