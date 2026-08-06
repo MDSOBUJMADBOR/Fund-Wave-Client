@@ -24,6 +24,11 @@ const ProfilePage = () => {
   const user = session?.user;
   const [isEditing, setIsEditing] = useState(false);
 
+
+
+
+
+
   if (!user) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
@@ -98,6 +103,12 @@ const ProfilePage = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
+
+
+
+
+
+{/* Edit Profile */}
                   <button
                     onClick={() => setIsEditing(!isEditing)}
                     className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-50 hover:bg-cyan-100 text-cyan-700 rounded-xl transition-colors font-medium text-sm"
@@ -108,6 +119,13 @@ const ProfilePage = () => {
                   <button className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors">
                     <Settings className="w-5 h-5" />
                   </button>
+
+
+
+
+
+
+
                   {/* <button className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors">
                     <LogOut className="w-5 h-5" />
                   </button> */}
