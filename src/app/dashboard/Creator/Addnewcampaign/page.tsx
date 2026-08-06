@@ -178,26 +178,23 @@ alert("Campaign added successfully ✅");
   }
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-slate-100 py-10">
-      <div className="mx-auto max-w-5xl px-4">
+    <section className=" bg-gradient-to-br from-slate-100 via-white to-slate-100 py-4">
+      <div className="mx-auto max-w-6xl px-4">
         <div className="rounded-3xl bg-white shadow-2xl overflow-hidden border border-gray-100/50 backdrop-blur-sm transition-all">
           {/* Header */}
-          <div className="relative bg-gradient-to-r from-cyan-600 via-sky-600 to-indigo-700 p-8 md:p-10">
+          {/* <div className="relative bg-gradient-to-r from-cyan-600 via-sky-600 to-indigo-700 p-8 md:p-10">
             <div className="relative z-10">
               <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
                 Start a Campaign
               </h1>
-              <p className="mt-2 text-cyan-100 text-lg max-w-2xl">
-                Share your vision, raise funds, and make a difference. Your
-                campaign will be reviewed by our team before going live.
-              </p>
+             
             </div>
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/3"></div>
-          </div>
+          </div> */}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="p-8 md:p-10 space-y-8">
+          <form onSubmit={handleSubmit} className="p-8 md:p-10 space-y-6">
             {formError && (
               <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700">
                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
@@ -231,7 +228,7 @@ alert("Campaign added successfully ✅");
             <div className="grid gap-6 md:grid-cols-2">
               {/* Campaign Title */}
               <div className="md:col-span-2">
-                <label className="mb-2 flex items-center gap-2 font-semibold text-gray-700">
+                <label className="mb-2 flex items-center gap-2 font-semibold text-gray-700 text-xl">
                   <Type size={18} className="text-cyan-600" />
                   Campaign Title
                 </label>
@@ -325,7 +322,7 @@ alert("Campaign added successfully ✅");
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                   <label
                     htmlFor="campaign-image"
-                    className={`relative w-32 h-32 rounded-xl border-2 border-dashed transition-all overflow-hidden flex items-center justify-center cursor-pointer
+                    className={` relative w-50 h-20 rounded-xl border-2 border-dashed transition-all overflow-hidden flex items-center justify-center cursor-pointer
                       ${
                         imageUrl
                           ? "border-cyan-500 bg-cyan-50"
@@ -387,7 +384,7 @@ alert("Campaign added successfully ✅");
                 </label>
                 <textarea
                   required
-                  rows={6}
+                  rows={2}
                   name="campaign_story"
                   placeholder="Describe your campaign, why it matters, and how funds will be used..."
                   className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 resize-y"
@@ -402,7 +399,7 @@ alert("Campaign added successfully ✅");
                 </label>
                 <textarea
                   required
-                  rows={4}
+                  rows={2}
                   name="reward_info"
                   placeholder="What will backers receive? (e.g., exclusive access, merchandise, etc.)"
                   className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 resize-y"
