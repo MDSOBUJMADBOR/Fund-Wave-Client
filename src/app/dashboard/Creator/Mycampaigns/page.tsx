@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Table, Button } from "@heroui/react";
+import { Table  } from "@heroui/react";
 import { Eye, Trash, Pencil } from "lucide-react";
-import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 // import EditModal from "@/components/EditModal";
 // import AddCampaignsDelete from "@/components/AddCampaignsDelete";
 import Image from "next/image";
+import Link from "next/link";
 
 
 type Campaign = {
@@ -60,6 +60,31 @@ const getStatusColor = (status?: string) => {
 
       {/* ================= DESKTOP TABLE ================= */}
       <div className="hidden md:block overflow-x-auto">
+
+
+<div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900">
+      My Campaigns
+    </h1>
+
+    <p className="mt-2 max-w-2xl text-sm text-gray-600">
+      Here are all the campaigns you have created. They are sorted by
+      the deadline (latest first).
+    </p>
+  </div>
+
+  <div>
+<Link href={"/dashboard/Creator/Addnewcampaign"}><button className="rounded-xl bg-violet-600 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-violet-700 hover:shadow-lg active:scale-95">
+      + Add New Campaign
+    </button></Link>
+  </div>
+</div>
+
+
+
+
+
         <Table className="min-w-[900px]">
           <Table.ScrollContainer>
             <Table.Content>
@@ -72,7 +97,6 @@ const getStatusColor = (status?: string) => {
                 <Table.Column>Status</Table.Column>
                 <Table.Column>Actions</Table.Column>
               </Table.Header>
-
               <Table.Body>
                 {books.length > 0 ? (
                   books.map((book) => (
@@ -138,6 +162,27 @@ const getStatusColor = (status?: string) => {
       </div>
 
       {/* ================= MOBILE CARD ================= */}
+
+<div className="md:hidden flex items-center justify-between rounded-2xl border border-gray-200 bg-white p-4 shadow-sm mb-6">
+  <div>
+    <h1 className="text-xl font-bold text-gray-900">
+      My Campaigns
+    </h1>
+    <p className="text-sm text-gray-500 mt-1">
+      Manage and track all your campaigns.
+    </p>
+  </div>
+
+  <Link href="/dashboard/Creator/Addnewcampaign">
+    <button className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-violet-700 hover:shadow-lg active:scale-95">
+      <span className="text-lg">+</span>
+      <span>Add New Campaign</span>
+    </button>
+  </Link>
+</div>
+
+
+
       <div className="md:hidden space-y-4">
         {books.length > 0 ? (
           books.map((book) => (
