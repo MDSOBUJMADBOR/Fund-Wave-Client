@@ -16,7 +16,7 @@ import { redirect } from "next/navigation";
 
 const EditModal = ({ book }) => {
 console.log(book,'book');
-const {_id,title,author,category,deliveryFee,description,status} = book;
+const {_id,campaign_title,funding_goal,minimum_contribution,campaign_story,campaign_image_url} = book;
 
 
 const onSubmit = async (e) => {
@@ -25,7 +25,7 @@ const formData = new FormData(e.currentTarget);
 const item = Object.fromEntries(formData.entries());
 
 
-const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bookpost/${_id}` , {
+const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/campaigns/${_id}` , {
   method: "PATCH",
   headers: {
     "content-type": "application/json",
@@ -37,11 +37,11 @@ const data = await res.json();
 
  // ✅ success check
   if (data.modifiedCount > 0) {
-    alert("Book updated successfully ✅");
+    alert("campaigns updated successfully ✅");
   } else {
     alert("No changes detected ⚠️");
   }
-redirect('/dashboard/librarian/overview')
+redirect('/dashboard/Creator/Home')
 }
 
 
@@ -60,43 +60,48 @@ redirect('/dashboard/librarian/overview')
               <Modal.Icon>
                 <Envelope className="size-5" />
               </Modal.Icon>
-              <Modal.Heading>Edit Book</Modal.Heading>
+              <Modal.Heading>Edit Campaigns</Modal.Heading>
             </Modal.Header>
 
             <Modal.Body className="p-6">
               <Surface>
                 <form onSubmit={onSubmit} className="flex flex-col gap-4">
 
-                  <TextField className="w-full" name="title" isRequired  defaultValue={title}>
+                  {/* <TextField className="w-full" name="campaign_image_url" isRequired  defaultValue={campaign_image_url}>
+                    <Label>Image </Label>
+                    <Input className="w-full" name="campaign_image_url"/> 
+                  </TextField> */}
+
+                  <TextField className="w-full" name="campaign_title" isRequired  defaultValue={campaign_title}>
                     <Label>Title</Label>
-                    <Input className="w-full" name="title"  /> 
+                    <Input className="w-full" name="campaign_title"  /> 
                   </TextField>
 
                 
-                  <TextField className="w-full" name="author" isRequired  defaultValue={author}>
-                    <Label>Author</Label>
-                     <Input className="w-full" name="author"  /> 
+                  <TextField className="w-full" name="funding_goal" isRequired  defaultValue={funding_goal}>
+                    <Label>Goal(Credits)</Label>
+                     <Input className="w-full" name="funding_goal"  /> 
                   </TextField>
 
-                  <TextField className="w-full" name="category" isRequired defaultValue={category}>
-                    <Label>Category</Label>
-                    <Input className="w-full" name="category"  /> 
+                  <TextField className="w-full" name="minimum_contribution" isRequired defaultValue={minimum_contribution}>
+                    <Label>Raised(Credits)</Label>
+                    <Input className="w-full" name="minimum_contribution"  /> 
                   </TextField>
 
-                  <TextField className="w-full" name="deliveryFee" isRequired  defaultValue={deliveryFee}>
+                  {/* <TextField className="w-full" name="deliveryFee" isRequired  defaultValue={deliveryFee}>
                     <Label>Delivery Fee</Label>
                     <Input className="w-full" name="deliveryFee"  /> 
-                  </TextField>
+                  </TextField> */}
 
-                  <TextField className="w-full" name="status" isRequired  defaultValue={status}>
+                  {/* <TextField className="w-full" name="status" isRequired  defaultValue={status}>
                     <Label>Status</Label>
                     <Input className="w-full" name="status"  /> 
-                  </TextField>
+                  </TextField> */}
 
-                  <TextField className="w-full" name="description" isRequired  defaultValue={description}>
-                    <Label>Description</Label>
+                  <TextField className="w-full" name="campaign_story" isRequired  defaultValue={campaign_story}>
+                    <Label>Campaign Story</Label>
                     <TextArea
-                      name="description"
+                      name="campaign_story"
                      className="w-full"
                     />
                   </TextField>

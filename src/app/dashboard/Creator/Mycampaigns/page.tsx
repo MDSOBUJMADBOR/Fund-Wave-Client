@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Table  } from "@heroui/react";
 import { Eye, Trash, Pencil } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
-// import EditModal from "@/components/EditModal";
+import EditModal from "@/components/EditModal";
 // import AddCampaignsDelete from "@/components/AddCampaignsDelete";
 import Image from "next/image";
 import Link from "next/link";
@@ -137,8 +137,8 @@ const getStatusColor = (status?: string) => {
                         <div className="flex gap-2">
                                                   
 
-                             {/* <EditModal book={book}></EditModal>  */}
-                             Editmodal
+                             <EditModal book={book}></EditModal> 
+                            
                             {/* <AddCampaignsDelete user={book}></Add> */}
                             delete
                         
@@ -231,8 +231,8 @@ const getStatusColor = (status?: string) => {
               <div className="flex gap-2 mt-3">
 
 
-               {/* <EditModal book={book}></EditModal> */}
-               EditModal 
+               <EditModal book={book}></EditModal>
+              
               {/* <AddBookDelect user={book}></AddBookDelect> */}
               delete 
               </div>
