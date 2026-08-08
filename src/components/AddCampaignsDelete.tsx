@@ -1,16 +1,16 @@
 
 import { AlertDialog, Button } from '@heroui/react';
-import { CircleX, X } from 'lucide-react';
+import { CircleX, X,Trash2 } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import React from 'react';
 
 const AddCampaignsDelete = ({user}) => {
-    console.log(user,'user');
+    // console.log(user,'user');
 const {_id} = user;
-console.log(user,'userlist');
+// console.log(user,'userlist');
 
  const handleDelete = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bookpost/${_id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/campaigns/${_id}`, {
       method: "DELETE",
       headers: {
         "content-type": "application/json", 
@@ -18,14 +18,14 @@ console.log(user,'userlist');
 
     });
     const data = await res.json();
-    redirect('/dashboard/librarian/addbook')
+    redirect('/dashboard/Creator/Home')
     // console.log(data,'data');
   };
 
           return (
                     <div>
  <AlertDialog>
-      <Button className="rounded-md" variant="danger">  <X /></Button>
+      <Button className="rounded-md bg-red-200 text-red-600" ><Trash2 />  Delete </Button>
       <AlertDialog.Backdrop>
         <AlertDialog.Container>
           <AlertDialog.Dialog className="sm:max-w-[400px]">

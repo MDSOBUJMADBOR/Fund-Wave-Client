@@ -5,7 +5,7 @@ import { Table  } from "@heroui/react";
 import { Eye, Trash, Pencil } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import EditModal from "@/components/EditModal";
-// import AddCampaignsDelete from "@/components/AddCampaignsDelete";
+import AddCampaignsDelete from "@/components/AddCampaignsDelete";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -26,7 +26,7 @@ const MYcampaigns = () => {
   const user = session?.user;
  
 const [books, setBooks] = useState<Campaign[]>([]);
-  console.log(books,);
+  // console.log(books,);
 
   // ✅ fetch books
   useEffect(() => {
@@ -139,8 +139,8 @@ const getStatusColor = (status?: string) => {
 
                              <EditModal book={book}></EditModal> 
                             
-                            {/* <AddCampaignsDelete user={book}></Add> */}
-                            delete
+                            <AddCampaignsDelete user={book}></AddCampaignsDelete>
+                           
                         
 
                         </div>
@@ -232,9 +232,9 @@ const getStatusColor = (status?: string) => {
 
 
                <EditModal book={book}></EditModal>
-              
-              {/* <AddBookDelect user={book}></AddBookDelect> */}
-              delete 
+              <AddCampaignsDelete user={book}></AddCampaignsDelete>
+             
+            
               </div>
             </div>
           ))

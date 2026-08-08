@@ -11,11 +11,11 @@ import {
   TextArea,
   TextField,
 } from "@heroui/react";
-import { SquarePen } from "lucide-react";
+import { SquarePen,Pencil } from "lucide-react";
 import { redirect } from "next/navigation";
 
 const EditModal = ({ book }) => {
-console.log(book,'book');
+// console.log(book,'book');
 const {_id,campaign_title,funding_goal,minimum_contribution,campaign_story,campaign_image_url} = book;
 
 
@@ -47,8 +47,8 @@ redirect('/dashboard/Creator/Home')
 
   return (
     <Modal>
-      <Button className="rounded-md">
-        <SquarePen size={16} />
+      <Button className="rounded-md border border-indigo-200  bg-[#d9cde9] text-[#8121ff]">
+         <Pencil /> Update 
       </Button>
 
       <Modal.Backdrop>
