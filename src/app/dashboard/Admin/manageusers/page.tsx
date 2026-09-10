@@ -177,7 +177,7 @@ const ManageUsersPage = () => {
                       user.image ||
                       "https://ui-avatars.com/api/?name=User"
                     }
-                    alt={user.display_name}
+                    alt={user?.name}
                     className="h-11 w-11 shrink-0 rounded-full object-cover"
                   />
 
@@ -361,6 +361,7 @@ const ManageUsersPage = () => {
                       >
                         Remove
                       </button>
+                      
                     </td>
                   </tr>
                 ))

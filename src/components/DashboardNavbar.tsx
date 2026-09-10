@@ -24,7 +24,9 @@ const UserIcon = () => (
 const DashboardNavbar = () => {
   const { data: session } = useSession();
   const user = session?.user;
-  const role = user?.role || "Supporter";
+
+  // TypeScript fix for custom role
+  const role = (user as typeof user & { role?: string })?.role || "Supporter";
 
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -39,48 +41,51 @@ const DashboardNavbar = () => {
         setProfileOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
+  // Sign out
   const handleSignOut = async () => {
     await authClient.signOut();
     window.location.href = "/";
   };
 
   return (
-    <nav className="border-b border-gray-200 shadow p-2 lg:px-4 w-full bg-white flex items-center justify-between sticky top-0 z-40">
-      {/* Left side: Logo */}
+    <nav className="sticky top-0 z-40 flex w-full items-center justify-between border-b border-gray-200 bg-white p-2 shadow lg:px-4">
+      {/* ================= LEFT SIDE ================= */}
       <Link href="/" className="flex items-center gap-2">
-        {/* Updated Logo Color to match Landing Page dark blue/slate */}
-        <span className="text-2xl font-extrabold text-indigo-600 transition-colors hidden lg:flex">
+        <span className="hidden text-2xl font-extrabold text-indigo-600 transition-colors lg:flex">
           FundWave
         </span>
       </Link>
 
-      {/* Center Tagline - Made visible and color matched */}
-      <div className="hidden md:block text-sm text-gray-600 font-medium">
+      {/* ================= CENTER TAGLINE ================= */}
+      <div className="hidden text-sm font-medium text-gray-600 md:block">
         Empowering Change, One Donation at a Time
       </div>
 
-      {/* Right side: Profile Dropdown / Sign In */}
+      {/* ================= RIGHT SIDE ================= */}
       <div className="flex items-center gap-4">
         {user ? (
           <div className="relative" ref={profileRef}>
+            {/* Profile Button */}
             <button
               onClick={() => setProfileOpen(!profileOpen)}
-              className="flex items-center gap-2.5 p-1 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-200 cursor-pointer"
+              className="flex cursor-pointer items-center gap-2.5 rounded-full p-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200"
             >
-              {/* Keep Gradient Border, it adds a nice touch of purple from landing page */}
-              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 p-[2px] hover:scale-105 transition-transform shadow-sm">
-                <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden border border-white">
+              {/* Profile Image */}
+              <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 p-[2px] shadow-sm transition-transform hover:scale-105">
+                <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-white bg-white">
                   {user?.image ? (
                     <img
                       src={user.image}
                       alt={user.name || "User"}
-                      className="w-full h-full rounded-full object-cover"
+                      className="h-full w-full rounded-full object-cover"
                     />
                   ) : (
                     <UserIcon />
@@ -89,35 +94,44 @@ const DashboardNavbar = () => {
               </div>
             </button>
 
-            {/* Dropdown Menu - Updated to Light Theme */}
+            {/* ================= DROPDOWN ================= */}
             {profileOpen && (
-              <div className="absolute right-0 mt-3 w-60 rounded-2xl bg-white border border-gray-100 p-4 shadow-xl animate-fade-in z-50">
-                <div className="pb-3 border-b border-gray-100 mb-3">
-                  <p className="text-[11px] text-gray-500 font-medium tracking-wide uppercase">
+              <div className="absolute right-0 z-50 mt-3 w-60 animate-fade-in rounded-2xl border border-gray-100 bg-white p-4 shadow-xl">
+                {/* User Information */}
+                <div className="mb-3 border-b border-gray-100 pb-3">
+                  <p className="text-[11px] font-medium uppercase tracking-wide text-gray-500">
                     Signed in as
                   </p>
-                  <p className="text-base font-bold text-[#0f172a] truncate">
+
+                  <p className="truncate text-base font-bold text-[#0f172a]">
                     {user?.name || "User"}
                   </p>
-                  <p className="text-xs text-gray-600 font-normal truncate">
+
+                  <p className="truncate text-xs font-normal text-gray-600">
                     {user?.email}
+                  </p>
+
+                  {/* Role */}
+                  <p className="mt-1 text-xs font-semibold text-indigo-600">
+                    {role}
                   </p>
                 </div>
 
-                {/* Dashboard Link commented out in original */}
+                {/* Home Button */}
                 <Link
-                  href={`/`}
+                  href="/"
                   onClick={() => setProfileOpen(false)}
-                  className="block mb-2.5"
+                  className="mb-2.5 block"
                 >
-                  <button className="w-full rounded-xl text-indigo-700 bg-indigo-50 py-2.5 cursor-pointer text-sm font-semibold hover:bg-indigo-100 transition-colors">
+                  <button className="w-full cursor-pointer rounded-xl bg-indigo-50 py-2.5 text-sm font-semibold text-indigo-700 transition-colors hover:bg-indigo-100">
                     Home
-                   </button>
+                  </button>
                 </Link>
 
+                {/* Logout Button */}
                 <button
                   onClick={handleSignOut}
-                  className="w-full block px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl transition-colors cursor-pointer text-center shadow-sm"
+                  className="block w-full cursor-pointer rounded-xl bg-red-600 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition-colors hover:bg-red-700"
                 >
                   Log Out
                 </button>
@@ -127,7 +141,7 @@ const DashboardNavbar = () => {
         ) : (
           <Link
             href="/login"
-            className="text-sm bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-full font-semibold transition-colors shadow-sm"
+            className="rounded-full bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700"
           >
             Sign In
           </Link>
