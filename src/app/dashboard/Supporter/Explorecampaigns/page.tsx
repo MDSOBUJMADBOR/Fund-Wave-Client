@@ -3,7 +3,7 @@ import React from 'react';
 const ExploreCampaigns = () => {
     return (
         <div>
-            Explore Campaigns
+            Explore Campaigns 
         </div>
     );
 };
