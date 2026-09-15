@@ -172,7 +172,7 @@ const TopFoundedCampaigns = () => {
 
           <button
             onClick={() => router.push("/explorecampaigns")}
-            className="flex items-center gap-1 text-xs font-semibold text-violet-600 transition hover:text-violet-800 sm:text-sm"
+            className="flex items-center gap-1 text-xs font-semibold text-violet-600 transition hover:text-violet-800 sm:text-sm cursor-pointer"
           >
             View All
             <ArrowUpRight className="h-3.5 w-3.5" />
@@ -181,7 +181,7 @@ const TopFoundedCampaigns = () => {
 
         {/* Campaign Cards */}
         <div className="grid grid-cols-1 gap-5  md:grid-cols-2  lg:grid-cols-3 xl:grid-cols-5">
-          {topCampaigns.map((campaign) => {
+          {topCampaigns.slice(0, 5).map((campaign) => {
             const raised = getAmountRaised(campaign);
             const progress = getProgress(campaign);
 
@@ -261,6 +261,8 @@ const TopFoundedCampaigns = () => {
             );
           })}
         </div>
+
+        
       </div>
     </section>
   );
