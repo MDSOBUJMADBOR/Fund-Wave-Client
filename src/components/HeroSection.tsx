@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import {
@@ -27,12 +27,19 @@ import {
   X,
 } from 'lucide-react';
 
+/* ============================================
+   Slide Type
+============================================ */
+
 interface SlideData {
   id: number;
+
   badge: string;
+
   titlePart1: string;
   titlePart2: string;
   highlightText: string;
+
   description: string;
 
   primaryBtnText: string;
@@ -48,13 +55,20 @@ interface SlideData {
   videoUrl: string;
 }
 
+/* ============================================
+   Slides
+============================================ */
+
 const slides: SlideData[] = [
   {
     id: 1,
+
     badge: 'Crowdfund the future',
+
     titlePart1: 'Fund Ideas. Build',
     titlePart2: 'Communities.',
     highlightText: 'Create Impact.',
+
     description:
       'FundBuddy connects creative minds with generous hearts. Support meaningful projects and be part of something bigger.',
 
@@ -75,10 +89,13 @@ const slides: SlideData[] = [
 
   {
     id: 2,
+
     badge: 'Support Creators Worldwide',
+
     titlePart1: 'Empower Dreams.',
     titlePart2: 'Fuel Innovation.',
     highlightText: 'Change Lives.',
+
     description:
       'Discover innovative products, art, and community causes. Help creators transform groundbreaking ideas into reality.',
 
@@ -99,10 +116,13 @@ const slides: SlideData[] = [
 
   {
     id: 3,
+
     badge: 'Launch Your Campaign',
+
     titlePart1: 'Share Stories.',
     titlePart2: 'Raise Capital.',
     highlightText: 'Grow Fast.',
+
     description:
       'Get welcome credits upon registration, showcase your vision to supporters, and request withdrawals easily.',
 
@@ -126,8 +146,9 @@ const slides: SlideData[] = [
    Animation Variants
 ============================================ */
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: {},
+
   visible: {
     transition: {
       staggerChildren: 0.12,
@@ -135,7 +156,7 @@ const containerVariants = {
   },
 };
 
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: {
     opacity: 0,
     y: 30,
@@ -152,7 +173,7 @@ const fadeUp = {
   },
 };
 
-const fadeRight = {
+const fadeRight: Variants = {
   hidden: {
     opacity: 0,
     x: 50,
@@ -171,6 +192,10 @@ const fadeRight = {
   },
 };
 
+/* ============================================
+   Button Hover Animation
+============================================ */
+
 const buttonHover = {
   y: -3,
   scale: 1.02,
@@ -185,14 +210,12 @@ const buttonHover = {
 ============================================ */
 
 export default function HeroSection() {
-  /*
-   * Currently playing video ID
-   */
   const [playingVideo, setPlayingVideo] = useState<number | null>(null);
 
-  /*
-   * Swiper slide change হলে video বন্ধ করে image দেখাবে
-   */
+  /* --------------------------------------------
+     Close video when slide changes
+  -------------------------------------------- */
+
   const handleSlideChange = () => {
     setPlayingVideo(null);
   };
@@ -232,7 +255,9 @@ export default function HeroSection() {
         }}
       />
 
-      {/* Decorative Dots */}
+      {/* ============================================
+          Decorative Dots
+      ============================================ */}
 
       <div className="pointer-events-none absolute left-[8%] top-[20%] hidden h-2 w-2 rounded-full bg-purple-400/50 lg:block" />
 
@@ -267,7 +292,6 @@ export default function HeroSection() {
         >
 
           {slides.map((slide) => (
-
             <SwiperSlide key={slide.id}>
 
               <div className="grid min-h-[580px] grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-14">
@@ -517,7 +541,6 @@ export default function HeroSection() {
                     ============================================ */}
 
                     {playingVideo !== slide.id && (
-
                       <Image
                         src={slide.imageUrl}
                         alt="FundBuddy campaign"
@@ -526,7 +549,6 @@ export default function HeroSection() {
                         sizes="(max-width: 768px) 100vw, 50vw"
                         className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
                       />
-
                     )}
 
                     {/* ============================================
@@ -534,7 +556,6 @@ export default function HeroSection() {
                     ============================================ */}
 
                     {playingVideo === slide.id && (
-
                       <motion.video
                         initial={{
                           opacity: 0,
@@ -556,7 +577,6 @@ export default function HeroSection() {
                           setPlayingVideo(null);
                         }}
                       />
-
                     )}
 
                     {/* ============================================
@@ -727,7 +747,6 @@ export default function HeroSection() {
                     ============================================ */}
 
                     {playingVideo === slide.id && (
-
                       <motion.button
                         initial={{
                           opacity: 0,
@@ -753,7 +772,6 @@ export default function HeroSection() {
                         <X className="h-5 w-5" />
 
                       </motion.button>
-
                     )}
 
                   </motion.div>
@@ -763,7 +781,6 @@ export default function HeroSection() {
               </div>
 
             </SwiperSlide>
-
           ))}
 
         </Swiper>
@@ -790,9 +807,7 @@ export default function HeroSection() {
           gap: 6px;
         }
 
-        .hero-swiper-custom
-          .swiper-pagination-bullet {
-
+        .hero-swiper-custom .swiper-pagination-bullet {
           width: 7px;
           height: 7px;
 
@@ -810,15 +825,11 @@ export default function HeroSection() {
             transform 0.35s ease;
         }
 
-        .hero-swiper-custom
-          .swiper-pagination-bullet:hover {
-
+        .hero-swiper-custom .swiper-pagination-bullet:hover {
           transform: scale(1.2);
         }
 
-        .hero-swiper-custom
-          .swiper-pagination-bullet-active {
-
+        .hero-swiper-custom .swiper-pagination-bullet-active {
           width: 30px;
 
           background: #9333ea;
@@ -837,4 +848,6 @@ export default function HeroSection() {
     </section>
   );
 }
+
+
 
