@@ -75,7 +75,7 @@ const AddNewCampaign = () => {
       } else {
         setUploadError("Upload failed. Please try again.");
       }
-    } catch (err) {
+    } catch  {
       setUploadError("Network error. Please check your connection.");
     } finally {
       setIsUploading(false);
@@ -158,7 +158,7 @@ alert("Campaign added successfully ✅");
       setSuccess(true);
       form.reset();
       setImageUrl("");
-    } catch (error) {
+    } catch  {
       setFormError("Failed to create campaign. Please try again.");
     } finally {
       setLoading(false);
@@ -213,7 +213,7 @@ alert("Campaign added successfully ✅");
               <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl text-green-700">
                 <CheckCircle className="w-5 h-5 flex-shrink-0" />
                 <span>
-                  Campaign created successfully! It's now pending review.
+                  Campaign created successfully! It is  now pending review.
                 </span>
                 <button
                   type="button"

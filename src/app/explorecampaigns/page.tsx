@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowUpRight, Loader2 } from "lucide-react";
+import {  Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface Campaign {
   _id: string;
@@ -180,10 +181,11 @@ const ExploreCampaignssPage = () => {
               >
                 {/* Image */}
                 <div className="relative h-32 w-full overflow-hidden bg-gray-100 sm:h-36">
-                  <img
+                  <Image
                     src={campaign.campaign_image_url || fallbackImage}
                     alt={campaign.campaign_title}
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    fill
                     onError={(event) => {
                       event.currentTarget.src = fallbackImage;
                     }}
