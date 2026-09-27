@@ -10,6 +10,7 @@ import {
   HandCoins,
   CircleCheck,
 } from "lucide-react";
+import Link from "next/link";
 
 const AboutPage = () => {
   const features = [
@@ -327,12 +328,12 @@ const AboutPage = () => {
           </p>
 
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <a
+            <Link
               href="/campaigns"
               className="rounded-xl bg-white px-6 py-3 text-sm font-semibold text-violet-700 transition hover:bg-violet-50"
             >
               Explore Campaigns
-            </a>
+            </Link>
 
             <a
               href="/register"
