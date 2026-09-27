@@ -9,12 +9,10 @@ import {
   Calendar,
   Edit,
   Settings,
-  LogOut,
   UserCircle,
   AtSign,
   CalendarDays,
   CheckCircle2,
-  Clock,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import { useState } from "react";
@@ -24,7 +22,9 @@ const ProfilePage = () => {
   const user = session?.user;
   const [isEditing, setIsEditing] = useState(false);
 
-
+const EditProfile = () => {
+  alert("Edit Profile")
+}
 
 
 
@@ -110,7 +110,7 @@ const ProfilePage = () => {
 
 {/* Edit Profile */}
                   <button
-                    onClick={() => setIsEditing(!isEditing)}
+                    onClick={() => { EditProfile() ;  setIsEditing(!isEditing)}}
                     className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-50 hover:bg-cyan-100 text-cyan-700 rounded-xl transition-colors font-medium text-sm"
                   >
                     <Edit className="w-4 h-4" />
