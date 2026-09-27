@@ -12,6 +12,7 @@ import 'swiper/css/effect-fade';
 
 // Lucide Icons
 import { Play, Sparkles } from 'lucide-react';
+import Image from 'next/image';
 
 interface SlideData {
   id: number;
@@ -149,9 +150,10 @@ export default function HeroSection() {
                   <div className="relative w-full h-[360px] sm:h-[440px] rounded-[36px] overflow-hidden shadow-2xl shadow-slate-300/60 border border-white">
                     
                     {/* Main Image */}
-                    <img
+                    <Image
                       src={slide.imageUrl}
                       alt="Hero Showcase"
+                      fill
                       className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
                     />
 

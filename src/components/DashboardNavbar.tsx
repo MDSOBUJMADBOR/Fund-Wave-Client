@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { authClient, useSession } from "@/lib/auth-client";
+import Image from "next/image";
 
 // Default User Icon Component
 const UserIcon = () => (
@@ -82,9 +83,10 @@ const DashboardNavbar = () => {
               <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 p-[2px] shadow-sm transition-transform hover:scale-105">
                 <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-white bg-white">
                   {user?.image ? (
-                    <img
+                    <Image
                       src={user.image}
                       alt={user.name || "User"}
+                      fill
                       className="h-full w-full rounded-full object-cover"
                     />
                   ) : (
