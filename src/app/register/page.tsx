@@ -1,343 +1,564 @@
-'use client';
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { 
-  User, 
-  Mail, 
-  Link as LinkIcon, 
-  Lock, 
-  Eye, 
-  EyeOff, 
-  CheckCircle2, 
-  Gift, 
-  ShieldCheck, 
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+  User,
+  Mail,
+  Link as LinkIcon,
+  Lock,
+  Eye,
+  EyeOff,
+  CheckCircle2,
+  Gift,
+  ShieldCheck,
   ChevronDown,
-  Loader2
-} from 'lucide-react';
-import { authClient } from '@/lib/auth-client';
+  Loader2,
+} from "lucide-react";
+
+import { authClient } from "@/lib/auth-client";
+
+type UserRole = "Supporter" | "Creator";
+
+interface FormData {
+  name: string;
+  email: string;
+  profilePictureUrl: string;
+  password: string;
+  confirmPassword: string;
+  role: UserRole;
+}
+
+interface RegisterError {
+  message?: string;
+}
 
 export default function RegisterPage() {
   const router = useRouter();
 
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    profilePictureUrl: '',
-    password: '',
-    confirmPassword: '',
-    role: 'Supporter',
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    email: "",
+    profilePictureUrl: "",
+    password: "",
+    confirmPassword: "",
+    role: "Supporter",
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
-  const [successMsg, setSuccessMsg] = useState('');
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState(false);
+
+  const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Password Validation Rules
+  // =========================
+  // Password Validation
+  // =========================
+
   const hasMinLength = formData.password.length >= 8;
+
   const hasUppercase = /[A-Z]/.test(formData.password);
+
   const hasLowercase = /[a-z]/.test(formData.password);
+
   const hasNumber = /[0-9]/.test(formData.password);
-  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(formData.password);
+
+  const hasSpecialChar =
+    /[!@#$%^&*(),.?":{}|<>]/.test(formData.password);
 
   const isPasswordStrong =
-    hasMinLength && hasUppercase && hasLowercase && hasNumber && hasSpecialChar;
+    hasMinLength &&
+    hasUppercase &&
+    hasLowercase &&
+    hasNumber &&
+    hasSpecialChar;
 
   const passwordsMatch =
     formData.confirmPassword.length > 0 &&
     formData.password === formData.confirmPassword;
 
+  // =========================
+  // Email Validation
+  // =========================
+
   const isValidEmail = (email: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
+  // =========================
+  // Handle Input Changes
+  // =========================
+
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement
+    >
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrorMsg('');
-    setSuccessMsg('');
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    setErrorMsg("");
+    setSuccessMsg("");
   };
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
+  // =========================
+  // Handle Registration
+  // =========================
 
-  //   // 1. Password Strength Check
-  //   if (!isPasswordStrong) {
-  //     setErrorMsg('Please meet all password requirements.');
-  //     return;
-  //   }
-
-  //   // 2. Passwords Match Check
-  //   if (!passwordsMatch) {
-  //     setErrorMsg('Passwords do not match.');
-  //     return;
-  //   }
-
-  //   setLoading(true);
-  //   setErrorMsg('');
-  //   setSuccessMsg('');
-
-  //   // 3. Assign Default Credits based on Role
-  //   const defaultCredits = formData.role === 'Supporter' ? 50 : 20;
-
-  //   try {
-  //     const { data, error } = await authClient.signUp.email({
-  //       email: formData.email,
-  //       password: formData.password,
-  //       name: formData.name,
-  //       image: formData.profilePictureUrl || undefined,
-  //       // Custom additional fields (Ensure user schema in Better Auth supports these fields)
-  //       role: formData.role,
-  //       credits: defaultCredits,
-  //       plan: 'free',
-  //     });
-
-  //     if (error) {
-  //       setErrorMsg(error.message || 'Registration failed. Please try again.');
-  //       setLoading(false);
-  //       return;
-  //     }
-
-  //     setSuccessMsg('Registration successful! Redirecting...');
-
-  //     // Redirect to homepage or login page
-  //     router.push('/');
-  //   } catch (err: any) {
-  //     setErrorMsg(err.message || 'An unexpected error occurred.');
-  //     setLoading(false);
-  //   }
-  // };
-
-const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
 
+    // Password strength check
     if (!isPasswordStrong) {
-      setErrorMsg('Please meet all password requirements.');
+      setErrorMsg(
+        "Please meet all password requirements."
+      );
       return;
     }
 
+    // Password match check
     if (!passwordsMatch) {
-      setErrorMsg('Passwords do not match.');
+      setErrorMsg("Passwords do not match.");
+      return;
+    }
+
+    // Email validation
+    if (!isValidEmail(formData.email)) {
+      setErrorMsg(
+        "Please enter a valid email address."
+      );
       return;
     }
 
     setLoading(true);
-    setErrorMsg('');
-    setSuccessMsg('');
+    setErrorMsg("");
+    setSuccessMsg("");
 
-    const defaultCredits = formData.role === 'Supporter' ? 50 : 20;
+    // Default credits
+    const defaultCredits =
+      formData.role === "Supporter" ? 50 : 20;
 
     try {
-      // 1. unused 'data' সরিয়ে শুধুমাত্র 'error' চেক করা হয়েছে (ESLint Fix)
-      // 2. TypeScript-কে custom fields এলাউ করতে 'as any' টাইপ কাস্ট ব্যবহার করা হয়েছে (TS Error Fix)
-      const { error } = await authClient.signUp.email({
+      const registrationData = {
         email: formData.email,
         password: formData.password,
         name: formData.name,
-        image: formData.profilePictureUrl || undefined,
+        image:
+          formData.profilePictureUrl || undefined,
         role: formData.role,
         credits: defaultCredits,
-        plan: 'free',
-      } as any);
+        plan: "free",
+      };
+
+      /*
+       * Better Auth may not know custom fields such as
+       * role, credits and plan depending on your client
+       * configuration.
+       *
+       * We avoid `any` and use a controlled type assertion.
+       */
+      const { error } =
+        await authClient.signUp.email(
+          registrationData as Parameters<
+            typeof authClient.signUp.email
+          >[0]
+        );
 
       if (error) {
-        setErrorMsg(error.message || 'Registration failed. Please try again.');
+        setErrorMsg(
+          error.message ||
+            "Registration failed. Please try again."
+        );
         setLoading(false);
         return;
       }
 
-      setSuccessMsg('Registration successful! Redirecting...');
-      router.push('/');
-    } catch (err: any) {
-      setErrorMsg(err.message || 'An unexpected error occurred.');
+      setSuccessMsg(
+        "Registration successful! Redirecting..."
+      );
+
+      router.push("/");
+    } catch (error: unknown) {
+      console.error(
+        "Registration error:",
+        error
+      );
+
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error &&
+        typeof (
+          error as RegisterError
+        ).message === "string"
+      ) {
+        setErrorMsg(
+          (error as RegisterError).message ||
+            "An unexpected error occurred."
+        );
+      } else {
+        setErrorMsg(
+          "An unexpected error occurred."
+        );
+      }
+
       setLoading(false);
     }
   };
 
-
-
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 md:p-8">
-      <div className="w-full max-w-5xl bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-12 p-6 md:p-8 gap-8 border border-slate-100">
-        
-        {/* Left Side: Info Cards */}
-        <div className="md:col-span-5 flex flex-col gap-6 justify-between">
-          <div className=" bg-purple-50 rounded-2xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden min-h-[200px]">
-            <div className=" w-20 h-20 bg-purple-200/60 rounded-full flex items-center justify-center mb-3">
-              <User className="w-10 h-10 text-purple-600" />
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4 md:p-8">
+      <div className="grid w-full max-w-5xl grid-cols-1 gap-8 overflow-hidden rounded-3xl border border-slate-100 bg-white p-6 shadow-xl md:grid-cols-12 md:p-8">
+
+        {/* =========================================
+            LEFT SIDE
+        ========================================== */}
+
+        <div className="flex flex-col justify-between gap-6 md:col-span-5">
+
+          {/* Profile Illustration */}
+          <div className="relative flex min-h-[200px] flex-col items-center justify-center overflow-hidden rounded-2xl bg-purple-50 p-6 text-center">
+
+            <div className="mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-purple-200/60">
+              <User className="h-10 w-10 text-purple-600" />
             </div>
-            <div className="space-y-2 w-full max-w-[180px]">
-              <div className="h-2 bg-purple-200 rounded w-full"></div>
-              <div className="h-2 bg-purple-200 rounded w-3/4 mx-auto"></div>
+
+            <div className="w-full max-w-[180px] space-y-2">
+              <div className="h-2 w-full rounded bg-purple-200" />
+
+              <div className="mx-auto h-2 w-3/4 rounded bg-purple-200" />
             </div>
           </div>
 
-          {/* Welcome Bonus Card */}
-          <div className="bg-purple-50/60 border border-purple-100 rounded-2xl p-5">
+          {/* Welcome Bonus */}
+          <div className="rounded-2xl border border-purple-100 bg-purple-50/60 p-5">
             <div className="flex items-start gap-3">
-              <div className="p-2 bg-purple-100 text-purple-600 rounded-xl">
-                <Gift className="w-6 h-6" />
+
+              <div className="rounded-xl bg-purple-100 p-2 text-purple-600">
+                <Gift className="h-6 w-6" />
               </div>
+
               <div>
-                <h3 className="font-bold text-slate-800 text-base">Welcome Bonus</h3>
-                <p className="text-sm text-slate-600 mt-1">
-                  Supporter will get <span className="font-semibold text-slate-900">50 credits</span>
+                <h3 className="text-base font-bold text-slate-800">
+                  Welcome Bonus
+                </h3>
+
+                <p className="mt-1 text-sm text-slate-600">
+                  Supporter will get{" "}
+                  <span className="font-semibold text-slate-900">
+                    50 credits
+                  </span>
                 </p>
+
                 <p className="text-sm text-slate-600">
-                  Creator will get <span className="font-semibold text-slate-900">20 credits</span>
+                  Creator will get{" "}
+                  <span className="font-semibold text-slate-900">
+                    20 credits
+                  </span>
                 </p>
-                <p className="text-xs text-slate-500 mt-3">
-                  These credits will be added to your account once on registration.
+
+                <p className="mt-3 text-xs text-slate-500">
+                  These credits will be added to
+                  your account once on registration.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Password Requirements Card */}
-          <div className="bg-slate-50 border border-slate-100 rounded-2xl p-5">
-            <div className="flex items-center gap-2 mb-3 text-slate-800 font-semibold text-sm">
-              <ShieldCheck className="w-5 h-5 text-purple-600" />
+          {/* Password Requirements */}
+          <div className="rounded-2xl border border-slate-100 bg-slate-50 p-5">
+
+            <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-800">
+              <ShieldCheck className="h-5 w-5 text-purple-600" />
               Password Requirements
             </div>
+
             <ul className="space-y-2 text-xs">
-              <li className={`flex items-center gap-2 ${hasMinLength ? 'text-emerald-600 font-medium' : 'text-slate-500'}`}>
-                <CheckCircle2 className={`w-4 h-4 ${hasMinLength ? 'text-emerald-500' : 'text-slate-300'}`} />
+
+              <li
+                className={`flex items-center gap-2 ${
+                  hasMinLength
+                    ? "font-medium text-emerald-600"
+                    : "text-slate-500"
+                }`}
+              >
+                <CheckCircle2
+                  className={`h-4 w-4 ${
+                    hasMinLength
+                      ? "text-emerald-500"
+                      : "text-slate-300"
+                  }`}
+                />
                 At least 8 characters
               </li>
-              <li className={`flex items-center gap-2 ${hasUppercase ? 'text-emerald-600 font-medium' : 'text-slate-500'}`}>
-                <CheckCircle2 className={`w-4 h-4 ${hasUppercase ? 'text-emerald-500' : 'text-slate-300'}`} />
+
+              <li
+                className={`flex items-center gap-2 ${
+                  hasUppercase
+                    ? "font-medium text-emerald-600"
+                    : "text-slate-500"
+                }`}
+              >
+                <CheckCircle2
+                  className={`h-4 w-4 ${
+                    hasUppercase
+                      ? "text-emerald-500"
+                      : "text-slate-300"
+                  }`}
+                />
                 One uppercase letter
               </li>
-              <li className={`flex items-center gap-2 ${hasLowercase ? 'text-emerald-600 font-medium' : 'text-slate-500'}`}>
-                <CheckCircle2 className={`w-4 h-4 ${hasLowercase ? 'text-emerald-500' : 'text-slate-300'}`} />
+
+              <li
+                className={`flex items-center gap-2 ${
+                  hasLowercase
+                    ? "font-medium text-emerald-600"
+                    : "text-slate-500"
+                }`}
+              >
+                <CheckCircle2
+                  className={`h-4 w-4 ${
+                    hasLowercase
+                      ? "text-emerald-500"
+                      : "text-slate-300"
+                  }`}
+                />
                 One lowercase letter
               </li>
-              <li className={`flex items-center gap-2 ${hasNumber ? 'text-emerald-600 font-medium' : 'text-slate-500'}`}>
-                <CheckCircle2 className={`w-4 h-4 ${hasNumber ? 'text-emerald-500' : 'text-slate-300'}`} />
+
+              <li
+                className={`flex items-center gap-2 ${
+                  hasNumber
+                    ? "font-medium text-emerald-600"
+                    : "text-slate-500"
+                }`}
+              >
+                <CheckCircle2
+                  className={`h-4 w-4 ${
+                    hasNumber
+                      ? "text-emerald-500"
+                      : "text-slate-300"
+                  }`}
+                />
                 One number
               </li>
-              <li className={`flex items-center gap-2 ${hasSpecialChar ? 'text-emerald-600 font-medium' : 'text-slate-500'}`}>
-                <CheckCircle2 className={`w-4 h-4 ${hasSpecialChar ? 'text-emerald-500' : 'text-slate-300'}`} />
+
+              <li
+                className={`flex items-center gap-2 ${
+                  hasSpecialChar
+                    ? "font-medium text-emerald-600"
+                    : "text-slate-500"
+                }`}
+              >
+                <CheckCircle2
+                  className={`h-4 w-4 ${
+                    hasSpecialChar
+                      ? "text-emerald-500"
+                      : "text-slate-300"
+                  }`}
+                />
                 One special character
               </li>
+
             </ul>
           </div>
         </div>
 
-        {/* Right Side: Form */}
-        <div className="md:col-span-7 flex flex-col justify-center">
+        {/* =========================================
+            RIGHT SIDE
+        ========================================== */}
+
+        <div className="flex flex-col justify-center md:col-span-7">
+
+          {/* Header */}
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-slate-900">Create Your Account</h1>
-            <p className="text-sm text-slate-500 mt-1">Join FundBuddy and start your journey today.</p>
+            <h1 className="text-2xl font-bold text-slate-900">
+              Create Your Account
+            </h1>
+
+            <p className="mt-1 text-sm text-slate-500">
+              Join FundBuddy and start your journey
+              today.
+            </p>
           </div>
 
+          {/* Error */}
           {errorMsg && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm">
+            <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-600">
               {errorMsg}
             </div>
           )}
 
+          {/* Success */}
           {successMsg && (
-            <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-600 rounded-xl text-sm">
+            <div className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-600">
               {successMsg}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Full Name */}
+          {/* Form */}
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4"
+          >
+
+            {/* Name */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Name</label>
+              <label
+                htmlFor="name"
+                className="mb-1 block text-xs font-semibold text-slate-700"
+              >
+                Name
+              </label>
+
               <div className="relative">
-                <User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+
                 <input
+                  id="name"
                   type="text"
                   name="name"
                   required
                   placeholder="Enter your full name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full pl-9 pr-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-sm outline-none focus:border-purple-600 focus:bg-white transition"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-9 pr-4 text-sm outline-none transition focus:border-purple-600 focus:bg-white"
                 />
               </div>
             </div>
 
             {/* Email */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Email</label>
+              <label
+                htmlFor="email"
+                className="mb-1 block text-xs font-semibold text-slate-700"
+              >
+                Email
+              </label>
+
               <div className="relative">
-                <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+
                 <input
+                  id="email"
                   type="email"
                   name="email"
                   required
                   placeholder="Enter your email address"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full pl-9 pr-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-sm outline-none focus:border-purple-600 focus:bg-white transition"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-9 pr-4 text-sm outline-none transition focus:border-purple-600 focus:bg-white"
                 />
               </div>
+
               {isValidEmail(formData.email) && (
-                <p className="text-xs text-emerald-600 mt-1 flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Looks good!
+                <p className="mt-1 flex items-center gap-1 text-xs text-emerald-600">
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  Looks good!
                 </p>
               )}
             </div>
 
             {/* Profile Picture URL */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Profile Picture URL</label>
+              <label
+                htmlFor="profilePictureUrl"
+                className="mb-1 block text-xs font-semibold text-slate-700"
+              >
+                Profile Picture URL
+              </label>
+
               <div className="relative">
-                <LinkIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <LinkIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+
                 <input
+                  id="profilePictureUrl"
                   type="url"
                   name="profilePictureUrl"
                   placeholder="https://example.com/your-image.jpg"
                   value={formData.profilePictureUrl}
                   onChange={handleChange}
-                  className="w-full pl-9 pr-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-sm outline-none focus:border-purple-600 focus:bg-white transition"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-9 pr-4 text-sm outline-none transition focus:border-purple-600 focus:bg-white"
                 />
               </div>
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+              <label
+                htmlFor="password"
+                className="mb-1 block text-xs font-semibold text-slate-700"
+              >
+                Password
+              </label>
+
               <div className="relative">
-                <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  type={
+                    showPassword
+                      ? "text"
+                      : "password"
+                  }
                   name="password"
                   required
                   placeholder="••••••••••••"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full pl-9 pr-10 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-sm outline-none focus:border-purple-600 focus:bg-white transition"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-9 pr-10 text-sm outline-none transition focus:border-purple-600 focus:bg-white"
                 />
+
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() =>
+                    setShowPassword(
+                      (prev) => !prev
+                    )
+                  }
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  aria-label={
+                    showPassword
+                      ? "Hide password"
+                      : "Show password"
+                  }
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
 
-              {/* Strength Progress Indicator */}
+              {/* Password Strength */}
               {formData.password && (
                 <div className="mt-2">
-                  <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
                     <div
                       className={`h-full transition-all duration-300 ${
-                        isPasswordStrong ? 'w-full bg-emerald-500' : 'w-1/2 bg-amber-400'
+                        isPasswordStrong
+                          ? "w-full bg-emerald-500"
+                          : "w-1/2 bg-amber-400"
                       }`}
-                    ></div>
+                    />
                   </div>
+
                   {isPasswordStrong && (
-                    <p className="text-xs text-emerald-600 mt-1 flex items-center gap-1">
-                      Strong password <CheckCircle2 className="w-3.5 h-3.5" />
+                    <p className="mt-1 flex items-center gap-1 text-xs text-emerald-600">
+                      Strong password
+                      <CheckCircle2 className="h-3.5 w-3.5" />
                     </p>
                   )}
                 </div>
@@ -346,76 +567,121 @@ const handleSubmit = async (e: React.FormEvent) => {
 
             {/* Confirm Password */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Confirm Password</label>
+              <label
+                htmlFor="confirmPassword"
+                className="mb-1 block text-xs font-semibold text-slate-700"
+              >
+                Confirm Password
+              </label>
+
               <div className="relative">
-                <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+
                 <input
-                  type={showConfirmPassword ? 'text' : 'password'}
+                  id="confirmPassword"
+                  type={
+                    showConfirmPassword
+                      ? "text"
+                      : "password"
+                  }
                   name="confirmPassword"
                   required
                   placeholder="••••••••••••"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="w-full pl-9 pr-10 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-sm outline-none focus:border-purple-600 focus:bg-white transition"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-9 pr-10 text-sm outline-none transition focus:border-purple-600 focus:bg-white"
                 />
+
                 <button
                   type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  onClick={() =>
+                    setShowConfirmPassword(
+                      (prev) => !prev
+                    )
+                  }
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  aria-label={
+                    showConfirmPassword
+                      ? "Hide confirm password"
+                      : "Show confirm password"
+                  }
                 >
-                  {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
+
               {passwordsMatch && (
-                <p className="text-xs text-emerald-600 mt-1 flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Passwords match
+                <p className="mt-1 flex items-center gap-1 text-xs text-emerald-600">
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  Passwords match
                 </p>
               )}
             </div>
 
-            {/* Role Dropdown */}
+            {/* Role */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Role</label>
+              <label
+                htmlFor="role"
+                className="mb-1 block text-xs font-semibold text-slate-700"
+              >
+                Role
+              </label>
+
               <div className="relative">
                 <select
+                  id="role"
                   name="role"
                   value={formData.role}
                   onChange={handleChange}
-                  className="w-full appearance-none px-4 py-2.5 bg-slate-50/50 border border-purple-200 rounded-xl text-sm text-slate-800 outline-none focus:border-purple-600 focus:bg-white transition cursor-pointer pr-10"
+                  className="w-full cursor-pointer appearance-none rounded-xl border border-purple-200 bg-slate-50/50 px-4 py-2.5 pr-10 text-sm text-slate-800 outline-none transition focus:border-purple-600 focus:bg-white"
                 >
-                  <option value="Supporter">Supporter (Get 50 Credits)</option>
-                  <option value="Creator">Creator (Get 20 Credits)</option>
+                  <option value="Supporter">
+                    Supporter (Get 50 Credits)
+                  </option>
+
+                  <option value="Creator">
+                    Creator (Get 20 Credits)
+                  </option>
                 </select>
-                <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+
+                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
               </div>
             </div>
 
-            {/* Submit Button */}
+            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 mt-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl text-sm transition shadow-lg shadow-purple-600/20 active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-70"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-purple-600 py-3 text-sm font-medium text-white shadow-lg shadow-purple-600/20 transition hover:bg-purple-700 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" /> Creating Account...
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Creating Account...
                 </>
               ) : (
-                'Create Account'
+                "Create Account"
               )}
             </button>
           </form>
 
-          {/* Footer Link */}
-          <p className="text-center text-xs text-slate-500 mt-6">
-            Already have an account?{' '}
-            <Link href="/login" className="text-purple-600 font-semibold hover:underline">
+          {/* Login Link */}
+          <p className="mt-6 text-center text-xs text-slate-500">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="font-semibold text-purple-600 hover:underline"
+            >
               Login
             </Link>
           </p>
         </div>
-
       </div>
     </div>
   );
 }
+

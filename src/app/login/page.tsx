@@ -64,11 +64,12 @@ export default function LoginPage() {
       } else {
         router.push('/');
       }
-    } catch (error) {
+    } catch {
       setAuthError('User not found or incorrect email/password!');
     } finally {
       setLoading(false);
     }
+
   };
 
   // Handle Google Sign-In
@@ -88,7 +89,7 @@ export default function LoginPage() {
         alert('Google login failed!');
         setAuthError(result.error.message || 'Google login failed!');
       }
-    } catch (error) {
+    } catch {
       alert('Google login failed!');
       setAuthError('An unexpected error occurred during Google Sign-In.');
     } finally {
@@ -353,7 +354,7 @@ export default function LoginPage() {
 
           {/* Footer Link */}
           <p className="text-center text-xs text-slate-500 mt-6">
-            Don't have an account?{' '}
+            Do not  have an account?{' '}
             <Link href="/register" className="text-purple-600 font-semibold hover:underline">
               Register
             </Link>
