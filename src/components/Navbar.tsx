@@ -274,8 +274,9 @@ export default function Navbar() {
   <Image
     src={user.image}
     alt={user.name || "User"}
-    fill
-    className="object-cover"
+    height={40}
+    width={40}
+    className="object-cover rounded-2xl"
   />
 ) : (
   <UserIcon />
@@ -550,7 +551,8 @@ export default function Navbar() {
   <Image
     src={user.image}
     alt={user.name || "User"}
-    fill
+    height={40}
+    width={40}
     className="object-cover"
   />
 ) : (

@@ -1,207 +1,684 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination } from 'swiper/modules';
+import React from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import {
+  Mail,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 
-// Swiper CSS Module Imports
-import 'swiper/css';
-import 'swiper/css/pagination';
-
-// Lucide Icons
-import { Star, Quote, Sparkles } from 'lucide-react';
-import Image from 'next/image';
+/* =====================================================
+   Types
+===================================================== */
 
 interface Testimonial {
   id: number;
   name: string;
-  role: string;
-  photo: string;
-  rating: number;
-  quote: string;
+  email: string;
+  role: "creator" | "supporter";
+  image: string;
 }
 
+/* =====================================================
+   Fallback Image
+===================================================== */
+
+const fallbackImage = "https://i.ibb.co/4pDNDk1/avatar.png";
+
+/* =====================================================
+   Testimonial Data
+===================================================== */
+
 const testimonials: Testimonial[] = [
+  /* =========================
+     CREATORS
+  ========================= */
+
   {
     id: 1,
     name: "Alex Morgan",
-    role: "Tech Campaign Creator",
-    photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop",
-    rating: 5,
-    quote: "FundBuddy was instrumental in turning our smart home device from a prototype into reality. The community support and instant credit transfers made our fundraising seamless!"
+    email: "alex@gmail.com",
+    role: "creator",
+    image:
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop",
   },
+
   {
     id: 2,
-    name: "Sarah Jenkins",
-    role: "Community Supporter",
-    photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=300&auto=format&fit=crop",
-    rating: 5,
-    quote: "I love supporting creative ideas on FundBuddy. Purchasing credit packages is quick, and seeing creators bring their projects to life makes me feel genuinely connected."
+    name: "David Chen",
+    email: "david@gmail.com",
+    role: "creator",
+    image:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop",
   },
+
   {
     id: 3,
-    name: "David Chen",
-    role: "Indie Game Developer",
-    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop",
-    rating: 5,
-    quote: "The platform transparently handles every credit contributed. Requesting fund withdrawals was super easy once we hit our goal. Highly recommended for all creators!"
+    name: "Sophia Martinez",
+    email: "sophia@gmail.com",
+    role: "creator",
+    image:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=300&auto=format&fit=crop",
   },
+
   {
     id: 4,
-    name: "Sophia Martinez",
-    role: "Art & Culture Creator",
-    photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=300&auto=format&fit=crop",
-    rating: 5,
-    quote: "As a first-time creator, I received 20 default credits just for signing up! The dashboard analytics made tracking contributions effortless."
+    name: "Emily Carter",
+    email: "emily@gmail.com",
+    role: "creator",
+    image:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=300&auto=format&fit=crop",
   },
+
   {
     id: 5,
     name: "Michael Brown",
-    role: "Startup Founder",
-    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop",
-    rating: 5,
-    quote: "FundBuddy helped us connect with supporters from around the world. The secure credit system made every contribution transparent and trustworthy."
+    email: "michael@gmail.com",
+    role: "creator",
+    image:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop",
   },
+
+  /* =========================
+     SUPPORTERS
+  ========================= */
+
   {
     id: 6,
-    name: "Emily Carter",
-    role: "Education Project Creator",
-    photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=300&auto=format&fit=crop",
-    rating: 5,
-    quote: "Launching my educational campaign was simple and stress-free. I loved how easy it was to engage with supporters and monitor campaign progress."
+    name: "Sarah Jenkins",
+    email: "sarah@gmail.com",
+    role: "supporter",
+    image:
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=300&auto=format&fit=crop",
   },
+
   {
     id: 7,
     name: "James Wilson",
-    role: "Creative Supporter",
-    photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=300&auto=format&fit=crop",
-    rating: 5,
-    quote: "I've backed multiple campaigns through FundBuddy, and every experience has been smooth. It's rewarding to see innovative ideas receive the support they deserve."
-  }
+    email: "james@gmail.com",
+    role: "supporter",
+    image:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=300&auto=format&fit=crop",
+  },
+
+  {
+    id: 8,
+    name: "Olivia Smith",
+    email: "olivia@gmail.com",
+    role: "supporter",
+    image:
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=300&auto=format&fit=crop",
+  },
+
+  {
+    id: 9,
+    name: "Daniel Brown",
+    email: "daniel@gmail.com",
+    role: "supporter",
+    image:
+      "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?q=80&w=300&auto=format&fit=crop",
+  },
+
+  {
+    id: 10,
+    name: "Emma Wilson",
+    email: "emma@gmail.com",
+    role: "supporter",
+    image:
+      "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?q=80&w=300&auto=format&fit=crop",
+  },
 ];
 
-export default function TestimonialSection() {
+/* =====================================================
+   Testimonial Card
+===================================================== */
+
+const TestimonialCard = ({
+  testimonial,
+}: {
+  testimonial: Testimonial;
+}) => {
   return (
-    <section className="py-20 bg-[#FAFAFC] relative overflow-hidden">
-      
-      {/* Background Soft Glow Spheres */}
-      <div className="absolute top-1/2 left-10 -translate-y-1/2 w-80 h-80 bg-purple-200/40 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-5 right-10 w-96 h-96 bg-indigo-100/50 rounded-full blur-3xl pointer-events-none" />
+    <div
+      className="
+        group relative
+        w-[280px] shrink-0
+        overflow-hidden
+        rounded-2xl
+        border border-slate-200
+        bg-white
+        p-5
+        shadow-[0_8px_30px_rgba(15,23,42,0.06)]
+        transition-all duration-300
+        hover:-translate-y-1
+        hover:border-indigo-200
+        hover:shadow-[0_15px_40px_rgba(79,70,229,0.14)]
+        sm:w-[310px]
+      "
+    >
+      {/* =================================================
+          Decorative Glow
+      ================================================= */}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-50 border border-purple-100/80 text-purple-700 text-xs font-semibold tracking-wide">
-            <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-            <span>Community Feedback</span>
-          </div>
+      <div
+        className="
+          pointer-events-none
+          absolute
+          -right-10
+          -top-10
+          h-28
+          w-28
+          rounded-full
+          bg-indigo-500/10
+          blur-3xl
+          transition-all
+          duration-500
+          group-hover:bg-indigo-500/20
+        "
+      />
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight">
-            Loved by <span className="text-purple-600">Creators & Supporters</span>
-          </h2>
-          
-          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-            See what our community members have to say about their journey with FundBuddy.
-          </p>
+      {/* =================================================
+          Card Content
+      ================================================= */}
+
+      <div className="relative flex items-center gap-4">
+        {/* =================================================
+            Avatar
+        ================================================= */}
+
+        <div
+          className="
+            relative
+            h-16
+            w-16
+            shrink-0
+            overflow-hidden
+            rounded-2xl
+            border
+            border-slate-200
+            bg-slate-100
+            shadow-sm
+          "
+        >
+          <Image
+            src={testimonial.image || fallbackImage}
+            alt={testimonial.name || "User"}
+            fill
+            sizes="64px"
+            unoptimized
+            className="
+              object-cover
+              transition-transform
+              duration-500
+              group-hover:scale-110
+            "
+          />
+
+          {/* Online Indicator */}
+
+          <span
+            className="
+              absolute
+              bottom-1
+              right-1
+              h-3
+              w-3
+              rounded-full
+              border-2
+              border-white
+              bg-emerald-500
+            "
+          />
         </div>
 
-        {/* Swiper Slider */}
-        <Swiper
-          modules={[Autoplay, Pagination]}
-          spaceBetween={28}
-          slidesPerView={1}
-          loop={true}
-          autoplay={{
-            delay: 5000,
-            disableOnInteraction: false,
-          }}
-          pagination={{
-            clickable: true,
-          }}
-          breakpoints={{
-            640: {
-              slidesPerView: 1,
-            },
-            768: {
-              slidesPerView: 2,
-            },
-            1024: {
-              slidesPerView: 3,
-            },
-          }}
-          className="testimonial-swiper-custom"
-        >
-          {testimonials.map((item) => (
-            <SwiperSlide key={item.id} className="h-auto pb-14">
-              <div className="bg-white/90 backdrop-blur-sm rounded-[24px] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col justify-between h-full transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 hover:-translate-y-1.5 group">
-                
-                {/* Upper Content */}
-                <div className="space-y-5">
-                  <div className="flex items-center justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300">
-                      <Quote className="w-5 h-5 fill-current" />
-                    </div>
-                    
-                    {/* Rating Stars */}
-                    <div className="flex items-center gap-1 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-100">
-                      {[...Array(item.rating)].map((_, i) => (
-                        <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      ))}
-                    </div>
-                  </div>
+        {/* =================================================
+            User Information
+        ================================================= */}
 
-                  {/* Quote Text */}
-                  <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-normal">
-                    &ldquo;{item.quote}&rdquo;
-                  </p>
-                </div>
+        <div className="min-w-0 flex-1">
+          {/* Name */}
 
-                {/* Bottom Content: User Info */}
-                <div className="flex items-center gap-3.5 pt-6 mt-6 border-t border-slate-100">
-                  <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-purple-200 shadow-sm shrink-0">
-                    <Image
-                      src={item.photo}
-                      alt={item.name}
-                      fill
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="text-slate-900 font-bold text-base leading-snug">
-                      {item.name}
-                    </h3>
-                    <p className="text-purple-600 text-xs font-semibold">
-                      {item.role}
-                    </p>
-                  </div>
-                </div>
+          <h3
+            className="
+              truncate
+              text-base
+              font-bold
+              text-slate-900
+            "
+          >
+            {testimonial.name}
+          </h3>
 
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+          {/* Email */}
 
+          <div className="mt-1 flex items-center gap-1.5">
+            <Mail
+              className="
+                h-3.5
+                w-3.5
+                shrink-0
+                text-slate-400
+              "
+            />
+
+            <p
+              className="
+                truncate
+                text-xs
+                text-slate-500
+              "
+            >
+              {testimonial.email}
+            </p>
+          </div>
+
+          {/* Role */}
+
+          <div
+            className="
+              mt-2
+              inline-flex
+              items-center
+              gap-1.5
+              rounded-full
+              bg-indigo-50
+              px-2.5
+              py-1
+            "
+          >
+            <ShieldCheck
+              className="
+                h-3.5
+                w-3.5
+                text-indigo-600
+              "
+            />
+
+            <span
+              className="
+                text-[11px]
+                font-semibold
+                capitalize
+                text-indigo-600
+              "
+            >
+              {testimonial.role}
+            </span>
+          </div>
+        </div>
       </div>
 
-      {/* Pagination Dot Styles */}
-      <style jsx global>{`
-        .testimonial-swiper-custom .swiper-pagination {
-          bottom: 0 !important;
-        }
-        .testimonial-swiper-custom .swiper-pagination-bullet {
-          background: #cbd5e1;
-          opacity: 1;
-          width: 8px;
-          height: 8px;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .testimonial-swiper-custom .swiper-pagination-bullet-active {
-          background: #9333ea;
-          width: 28px;
-          border-radius: 999px;
-        }
-      `}</style>
+      {/* =================================================
+          Divider
+      ================================================= */}
+
+      <div className="mt-5 h-px w-full bg-slate-100" />
+
+      {/* =================================================
+          Bottom Information
+      ================================================= */}
+
+      <div className="mt-3 flex items-center justify-between">
+        <span
+          className="
+            text-xs
+            font-medium
+            text-slate-400
+          "
+        >
+          FundBuddy{" "}
+          {testimonial.role === "creator"
+            ? "Creator"
+            : "Supporter"}
+        </span>
+
+        <span
+          className="
+            flex
+            items-center
+            gap-1
+            text-xs
+            font-medium
+            text-emerald-600
+          "
+        >
+          <span
+            className="
+              h-1.5
+              w-1.5
+              rounded-full
+              bg-emerald-500
+            "
+          />
+
+          Available
+        </span>
+      </div>
+    </div>
+  );
+};
+
+/* =====================================================
+   Marquee Row
+===================================================== */
+
+const MarqueeRow = ({
+  testimonials,
+  reverse = false,
+}: {
+  testimonials: Testimonial[];
+  reverse?: boolean;
+}) => {
+  /*
+    Example:
+
+    Original:
+    A B C D E
+
+    Duplicate:
+    A B C D E A B C D E
+
+    This allows the animation to continue
+    smoothly without an empty space.
+  */
+
+  const items = [
+    ...testimonials,
+    ...testimonials,
+  ];
+
+  return (
+    <div className="relative w-full overflow-hidden">
+      <motion.div
+        className="flex w-max gap-5"
+        initial={{
+          x: reverse ? "-50%" : "0%",
+        }}
+        animate={{
+          x: reverse ? "0%" : "-50%",
+        }}
+        transition={{
+          duration: reverse ? 32 : 28,
+          ease: "linear",
+          repeat: Infinity,
+          repeatType: "loop",
+        }}
+      >
+        {items.map((testimonial, index) => (
+          <TestimonialCard
+            key={`${testimonial.id}-${index}`}
+            testimonial={testimonial}
+          />
+        ))}
+      </motion.div>
+    </div>
+  );
+};
+
+/* =====================================================
+   Main Testimonial Component
+===================================================== */
+
+export default function TestimonialSection() {
+  /* =====================================================
+     Creator Data
+  ===================================================== */
+
+  const creators = testimonials.filter(
+    (item) => item.role === "creator"
+  );
+
+  /* =====================================================
+     Supporter Data
+  ===================================================== */
+
+  const supporters = testimonials.filter(
+    (item) => item.role === "supporter"
+  );
+
+  /* =====================================================
+     Main UI
+  ===================================================== */
+
+  return (
+    <section
+      className="
+        relative
+        overflow-hidden
+        bg-slate-50
+        px-4
+        py-12
+        sm:px-6
+        sm:py-14
+        lg:px-8
+        lg:py-16
+      "
+    >
+      {/* =================================================
+          Background Decoration
+      ================================================= */}
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          -left-32
+          top-10
+          h-72
+          w-72
+          rounded-full
+          bg-indigo-200/30
+          blur-3xl
+        "
+      />
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          -bottom-32
+          -right-32
+          h-80
+          w-80
+          rounded-full
+          bg-blue-200/30
+          blur-3xl
+        "
+      />
+
+      <div className="relative mx-auto max-w-7xl">
+        {/* =================================================
+            Section Header
+        ================================================= */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 20,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          transition={{
+            duration: 0.5,
+          }}
+          className="
+            mx-auto
+            mb-9
+            max-w-2xl
+            text-center
+            sm:mb-11
+          "
+        >
+          {/* Badge */}
+
+          <div
+            className="
+              mb-4
+              inline-flex
+              items-center
+              gap-2
+              rounded-full
+              border
+              border-indigo-100
+              bg-indigo-50
+              px-3.5
+              py-1.5
+              text-xs
+              font-semibold
+              text-indigo-600
+            "
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+
+            Community Members
+          </div>
+
+          {/* Heading */}
+
+          <h2
+            className="
+              text-2xl
+              font-bold
+              tracking-tight
+              text-slate-900
+              sm:text-3xl
+              lg:text-4xl
+            "
+          >
+            Meet Our{" "}
+            <span className="text-indigo-600">
+              Community
+            </span>
+          </h2>
+
+          {/* Description */}
+
+          <p
+            className="
+              mx-auto
+              mt-3
+              max-w-xl
+              text-sm
+              leading-6
+              text-slate-500
+              sm:text-base
+            "
+          >
+            Meet the creators and supporters who make
+            FundBuddy a growing community.
+          </p>
+        </motion.div>
+
+        {/* =================================================
+            Marquee Container
+        ================================================= */}
+
+        <div className="relative">
+          {/* =================================================
+              Left Fade
+          ================================================= */}
+
+          <div
+            className="
+              pointer-events-none
+              absolute
+              inset-y-0
+              left-0
+              z-20
+              w-12
+              bg-gradient-to-r
+              from-slate-50
+              to-transparent
+              sm:w-20
+              lg:w-32
+            "
+          />
+
+          {/* =================================================
+              Right Fade
+          ================================================= */}
+
+          <div
+            className="
+              pointer-events-none
+              absolute
+              inset-y-0
+              right-0
+              z-20
+              w-12
+              bg-gradient-to-l
+              from-slate-50
+              to-transparent
+              sm:w-20
+              lg:w-32
+            "
+          />
+
+          {/* =================================================
+              TOP ROW
+              CREATOR
+              RIGHT → LEFT
+          ================================================= */}
+
+          <MarqueeRow
+            testimonials={creators}
+            reverse={false}
+          />
+
+          {/* =================================================
+              BOTTOM ROW
+              SUPPORTER
+              LEFT → RIGHT
+          ================================================= */}
+
+          <div className="mt-5">
+            <MarqueeRow
+              testimonials={supporters}
+              reverse={true}
+            />
+          </div>
+        </div>
+
+        {/* =================================================
+            Bottom Text
+        ================================================= */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+          }}
+          whileInView={{
+            opacity: 1,
+          }}
+          viewport={{
+            once: true,
+          }}
+          transition={{
+            delay: 0.3,
+            duration: 0.5,
+          }}
+          className="mt-8 text-center"
+        >
+          <p
+            className="
+              text-xs
+              text-slate-400
+              sm:text-sm
+            "
+          >
+            Trusted creators and supporters helping
+            bring great ideas to life.
+          </p>
+        </motion.div>
+      </div>
     </section>
   );
 }
