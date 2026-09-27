@@ -34,40 +34,44 @@ const WithdrawalTable = () => {
 
 
   // ================= FETCH WITHDRAWALS =================
-  useEffect(() => {
-    const fetchWithdrawals = async () => {
-      try {
-        setLoading(true);
-        setError("");
+ useEffect(() => {
+  const fetchWithdrawals = async () => {
+    try {
+      setLoading(true);
+      setError("");
 
-        const response = await fetch(
-          `http://localhost:5000/withdrawals/email/${userEmail}`
-        );
+      const response = await fetch(
+        `http://localhost:5000/withdrawals/email/${userEmail}`
+      );
 
-        const data: Withdrawal[] = await response.json();
+      const data: Withdrawal[] = await response.json();
 
-        console.log("API Response:", data);
+      console.log("API Response:", data);
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch withdrawals");
-        }
-
-        setWithdrawals(data);
-      } catch (error) {
-        console.error("Withdrawal fetch error:", error);
-
-        setError(
-          error instanceof Error
-            ? error.message
-            : "Something went wrong"
-        );
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error("Failed to fetch withdrawals");
       }
-    };
 
+      setWithdrawals(data);
+    } catch (error) {
+      console.error("Withdrawal fetch error:", error);
+
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (userEmail) {
     fetchWithdrawals();
-  }, []);
+  }
+}, [userEmail]);
+
+
 
   // ================= STATUS STYLE =================
   const getStatusStyle = (status: string) => {
