@@ -10,6 +10,7 @@ import 'swiper/css/pagination';
 
 // Lucide Icons
 import { Star, Quote, Sparkles } from 'lucide-react';
+import Image from 'next/image';
 
 interface Testimonial {
   id: number;
@@ -159,9 +160,10 @@ export default function TestimonialSection() {
                 {/* Bottom Content: User Info */}
                 <div className="flex items-center gap-3.5 pt-6 mt-6 border-t border-slate-100">
                   <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-purple-200 shadow-sm shrink-0">
-                    <img
+                    <Image
                       src={item.photo}
                       alt={item.name}
+                      fill
                       className="w-full h-full object-cover"
                     />
                   </div>

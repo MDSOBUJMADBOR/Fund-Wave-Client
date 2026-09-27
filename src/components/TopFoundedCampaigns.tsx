@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { ArrowUpRight, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface Campaign {
   _id: string;
@@ -193,14 +194,15 @@ const TopFoundedCampaigns = () => {
               >
                 {/* Image */}
                 <div className="relative h-32 w-full overflow-hidden bg-gray-100 sm:h-36">
-                  <img
-                    src={campaign.campaign_image_url || fallbackImage}
-                    alt={campaign.campaign_title}
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                    onError={(event) => {
-                      event.currentTarget.src = fallbackImage;
-                    }}
-                  />
+                  <Image
+  src={campaign.campaign_image_url || fallbackImage}
+  alt={campaign.campaign_title}
+  fill
+  className="object-cover transition duration-500 group-hover:scale-105"
+  onError={(event) => {
+    event.currentTarget.src = fallbackImage;
+  }}
+/>
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
                 </div>

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { HiHome } from "react-icons/hi2";
 import { useState, useRef, useEffect } from "react";
 import { authClient } from "@/lib/auth-client";
+import Image from "next/image";
 
 // ===============================
 // Navigation Links
@@ -26,6 +27,10 @@ const navLinks = [
   {
     title: "Contact",
     href: "/contact",
+  },
+  {
+    title: "Ai Chat",
+    href: "/aichat",
   },
 ];
 
@@ -265,15 +270,16 @@ export default function Navbar() {
                 <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-purple-600 to-emerald-500 p-[1.5px] hover:scale-105 transition-transform">
                   <div className="w-full h-full rounded-full bg-[#0a0a16] flex items-center justify-center overflow-hidden">
 
-                    {user.image ? (
-                      <img
-                        src={user.image}
-                        alt={user.name || "User"}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <UserIcon />
-                    )}
+{user.image ? (
+  <Image
+    src={user.image}
+    alt={user.name || "User"}
+    fill
+    className="object-cover"
+  />
+) : (
+  <UserIcon />
+)}
 
                   </div>
                 </div>
@@ -540,15 +546,16 @@ export default function Navbar() {
 
                       <div className="w-full h-full rounded-full bg-[#0a0a16] flex items-center justify-center overflow-hidden">
 
-                        {user.image ? (
-                          <img
-                            src={user.image}
-                            alt={user.name || "User"}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <UserIcon />
-                        )}
+{user.image ? (
+  <Image
+    src={user.image}
+    alt={user.name || "User"}
+    fill
+    className="object-cover"
+  />
+) : (
+  <UserIcon />
+)}
 
                       </div>
 
