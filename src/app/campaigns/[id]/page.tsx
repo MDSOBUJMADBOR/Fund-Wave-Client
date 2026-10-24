@@ -94,7 +94,7 @@ const CampaignDetailsPage = () => {
         setError("");
 
         const response = await fetch(
-          `http://localhost:5000/campaignss/${campaignId}`,
+          `${API_BASE}/campaignss/${campaignId}`,
           {
             cache: "no-store",
           }
