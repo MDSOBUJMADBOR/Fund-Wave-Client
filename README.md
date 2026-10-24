@@ -206,5 +206,27 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 
 ---
 
+## 👨‍💻 Developer Profile
+
+<div align="center">
+
+### **MD. Sobuj Madbor**
+*Full-Stack Web Developer • Next.js & MERN Specialist*
+
+[![GitHub Profile](https://img.shields.io/badge/GitHub-MDSOBUJMADBOR-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/MDSOBUJMADBOR)
+[![Email Contact](https://img.shields.io/badge/Email-sobujmadbor660%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:sobujmadbor660@gmail.com)
+[![Live Site](https://img.shields.io/badge/Live%20Platform-FundWave-7928CA?style=for-the-badge&logo=vercel&logoColor=white)](https://frontend-hro3.vercel.app)
+
+</div>
+
+### 🌟 About the Developer
+- 🔭 **Passionate Full-Stack Developer** building modern, scalable, and responsive web platforms using **Next.js (App Router), React 19, TypeScript, Node.js, Express, and MongoDB**.
+- 💡 **Core Focus**: Designing secure role-based dashboard ecosystems (Supporter / Creator / Admin), escrow payment integrations with Stripe, real-time notification architectures, and AI assistant systems.
+- 💬 **Open for Opportunities**: Open to freelance projects, collaborations, and full-stack software development roles.
+- 📬 **Contact**: [sobujmadbor660@gmail.com](mailto:sobujmadbor660@gmail.com) | [GitHub @MDSOBUJMADBOR](https://github.com/MDSOBUJMADBOR)
+
+---
+
 ## 📄 License
 This project is licensed under the [ISC License](LICENSE).
+
