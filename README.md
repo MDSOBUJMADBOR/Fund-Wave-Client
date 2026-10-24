@@ -2,7 +2,9 @@
 
 <div align="center">
 
-![FundWave Banner](https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1200&auto=format&fit=crop)
+
+<img width="1352" height="919" alt="deve" src="https://github.com/user-attachments/assets/3173f268-2450-48b6-8917-bd2bbca61022" />
+
 
 **Empowering Visionaries, One Wave at a Time.**
 
