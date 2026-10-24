@@ -129,12 +129,12 @@ const AddNewCampaign = () => {
       createdAt: new Date().toISOString(),
       creatorEmail: user.email,
       creatorName: user.name,
-      
+      amount_raised: 0,
     };
 
     try {
-
-const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/campaigns`, {
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE}/campaigns`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -142,24 +142,17 @@ const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/campaigns`, {
         body: JSON.stringify(campaignData),
       });
 
-    const data = await res.json();
-console.log(data);
-    if (data.acknowledged) {      
-alert("Campaign added successfully ✅");
-    };
-
-
-      // 🔁 Replace this with your actual API call
-      console.log("Campaign Data:", campaignData);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to create campaign");
+      }
 
       setSuccess(true);
       form.reset();
       setImageUrl("");
-    } catch  {
-      setFormError("Failed to create campaign. Please try again.");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to create campaign. Please try again.";
+      setFormError(msg);
     } finally {
       setLoading(false);
     }

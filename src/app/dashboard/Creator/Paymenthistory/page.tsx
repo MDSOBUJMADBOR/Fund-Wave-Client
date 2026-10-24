@@ -40,8 +40,9 @@ const WithdrawalTable = () => {
       setLoading(true);
       setError("");
 
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
       const response = await fetch(
-        `http://localhost:5000/withdrawals/email/${userEmail}`
+        `${API_BASE}/withdrawals/email/${encodeURIComponent(userEmail || "")}`
       );
 
       const data: Withdrawal[] = await response.json();

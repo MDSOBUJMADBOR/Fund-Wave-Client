@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { authClient, useSession } from "@/lib/auth-client";
 import Image from "next/image";
+import NotificationBell from "@/components/NotificationBell";
 
 // Default User Icon Component
 const UserIcon = () => (
@@ -72,6 +73,7 @@ const DashboardNavbar = () => {
 
       {/* ================= RIGHT SIDE ================= */}
       <div className="flex items-center gap-4">
+        {user && <NotificationBell />}
         {user ? (
           <div className="relative" ref={profileRef}>
             {/* Profile Button */}

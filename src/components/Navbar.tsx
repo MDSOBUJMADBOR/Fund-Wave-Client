@@ -6,6 +6,7 @@ import { HiHome } from "react-icons/hi2";
 import { useState, useRef, useEffect } from "react";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
+import NotificationBell from "@/components/NotificationBell";
 
 // ===============================
 // Navigation Links
@@ -257,6 +258,8 @@ export default function Navbar() {
           {/* =====================================
               Logged In User
           ====================================== */}
+
+          {user && <NotificationBell />}
 
           {user ? (
             <div className="relative" ref={profileRef}>
@@ -576,6 +579,8 @@ export default function Navbar() {
                     </div>
 
                   </div>
+
+                  <NotificationBell />
 
                 </div>
 

@@ -6,16 +6,19 @@ import { useEffect, useState } from "react";
 
 interface User {
   _id: string;
-  name: string;
-  email: string;
+  name?: string;
+  display_name?: string;
+  email?: string;
+  user_email?: string;
   image?: string;
+  photo_url?: string;
   role: "Admin" | "Creator" | "Supporter";
   credits: number;
 }
 
 type UserRole = "Admin" | "Creator" | "Supporter";
 
-const API_URL = "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 const fallbackImage = "https://ui-avatars.com/api/?name=User";
 
@@ -203,8 +206,8 @@ const ManageUsersPage = () => {
                   {/* Avatar */}
                   <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full">
                     <Image
-                      src={user.image || fallbackImage}
-                      alt={user.name || "User"}
+                      src={user.photo_url || user.image || fallbackImage}
+                      alt={user.display_name || user.name || "User"}
                       fill
                       sizes="44px"
                       className="object-cover"
@@ -214,11 +217,11 @@ const ManageUsersPage = () => {
                   {/* User Name + Email */}
                   <div className="min-w-0">
                     <p className="truncate font-semibold text-gray-800">
-                      {user.name}
+                      {user.display_name || user.name || "User"}
                     </p>
 
                     <p className="truncate text-xs text-gray-500">
-                      {user.email}
+                      {user.user_email || user.email || "No email"}
                     </p>
                   </div>
                 </div>
@@ -345,11 +348,12 @@ const ManageUsersPage = () => {
                         {/* Avatar */}
                         <Image
                           src={
+                            user.photo_url ||
                             user.image ||
                             fallbackImage
                           }
                           alt={
-                            user.name || "User"
+                            user.display_name || user.name || "User"
                           }
                           width={44}
                           height={44}
@@ -359,7 +363,7 @@ const ManageUsersPage = () => {
                         {/* Name + ID */}
                         <div className="min-w-0">
                           <p className="max-w-[150px] truncate text-sm font-semibold text-gray-800 lg:max-w-[200px]">
-                            {user.name}
+                            {user.display_name || user.name || "User"}
                           </p>
 
                           <p className="max-w-[150px] truncate text-xs text-gray-400 lg:max-w-[200px]">
@@ -372,7 +376,7 @@ const ManageUsersPage = () => {
                     {/* Email */}
                     <td className="px-4 py-4 lg:px-5">
                       <p className="max-w-[180px] truncate text-sm text-gray-600 lg:max-w-[250px]">
-                        {user.email}
+                        {user.user_email || user.email || "No email"}
                       </p>
                     </td>
 

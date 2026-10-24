@@ -17,6 +17,7 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 interface Campaign {
   _id: string;
@@ -32,6 +33,8 @@ interface Campaign {
   status?: string;
   creatorEmail?: string;
   creatorName?: string;
+  creator_email?: string;
+  creator_name?: string;
 }
 
 type TabType = "story" | "updates" | "supporters";
@@ -60,9 +63,25 @@ const CampaignDetailsPage = () => {
   const [contributing, setContributing] = useState(false);
   const [contributionError, setContributionError] = useState("");
 
-  // Example available credits.
-  // Replace this with the logged-in user's real credit balance.
-  const [availableCredits] = useState(120);
+  const { data: session } = authClient.useSession();
+  const [availableCredits, setAvailableCredits] = useState<number>(0);
+
+  useEffect(() => {
+    if (!session?.user?.email) return;
+    const fetchCredits = async () => {
+      try {
+        const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+        const res = await fetch(`${API_BASE}/users/credits/${session.user.email}`);
+        const data = await res.json();
+        if (data.success && data.credits !== undefined) {
+          setAvailableCredits(Number(data.credits));
+        }
+      } catch (e) {
+        console.error("Failed to fetch credits", e);
+      }
+    };
+    fetchCredits();
+  }, [session?.user?.email]);
 
   useEffect(() => {
     if (!campaignId) return;
@@ -191,6 +210,11 @@ const CampaignDetailsPage = () => {
       return;
     }
 
+    if (!session?.user?.email) {
+      setContributionError("Please login to make a contribution.");
+      return;
+    }
+
     if (amount > availableCredits) {
       setContributionError("You do not have enough available credits.");
       return;
@@ -199,41 +223,43 @@ const CampaignDetailsPage = () => {
     try {
       setContributing(true);
 
-      /*
-        এখানে আপনার contribution API call করবেন।
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const response = await fetch(`${API_BASE}/contributions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          campaign_id: campaign._id,
+          campaignId: campaign._id,
+          campaign_title: campaign.campaign_title,
+          Contribution_amount: amount,
+          amount,
+          Supporter_email: session.user.email,
+          supporterEmail: session.user.email,
+          Supporter_name: session.user.name || "Anonymous",
+          supporterName: session.user.name || "Anonymous",
+          creator_name: campaign.creator_name || campaign.creatorName || "Creator",
+          creatorName: campaign.creator_name || campaign.creatorName || "Creator",
+          creator_email: campaign.creator_email || campaign.creatorEmail || "",
+          creatorEmail: campaign.creator_email || campaign.creatorEmail || "",
+        }),
+      });
 
-        Example:
+      const resData = await response.json();
 
-        const response = await fetch(
-          "http://localhost:5000/contributions",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              campaignId: campaign._id,
-              amount,
-            }),
-          }
-        );
+      if (!response.ok) {
+        throw new Error(resData.message || "Contribution failed");
+      }
 
-        if (!response.ok) {
-          throw new Error("Contribution failed");
-        }
-      */
-
-      // Temporary success simulation.
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      alert(
-        "Contribution submitted successfully! It is pending approval."
-      );
-
+      alert("Contribution submitted successfully! It is pending approval.");
       setContributionAmount("");
-    } catch (err) {
+      // Deduct locally for instant UI update
+      setAvailableCredits((prev) => Math.max(0, prev - amount));
+    } catch (err: unknown) {
       console.error("Contribution error:", err);
-      setContributionError("Contribution failed. Please try again.");
+      const msg = err instanceof Error ? err.message : "Contribution failed. Please try again.";
+      setContributionError(msg);
     } finally {
       setContributing(false);
     }
@@ -576,6 +602,7 @@ const CampaignDetailsPage = () => {
 
                 <input
                   id="contributionAmount"
+                  name="Contribution_amount"
                   type="number"
                   min={minimum}
                   value={contributionAmount}

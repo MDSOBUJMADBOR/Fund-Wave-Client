@@ -1,4 +1,3 @@
-
 export interface Campaign {
   _id: string;
   campaign_title: string;
@@ -8,4 +7,9 @@ export interface Campaign {
   campaign_story: string;
   deadline: string;
   status: string;
+  reward_info?: string;
+  amount_raised?: number;
+  category?: string;
+  creatorEmail?: string;
+  creatorName?: string;
 }
